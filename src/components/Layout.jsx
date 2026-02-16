@@ -47,22 +47,24 @@ const Layout = () => {
             </div>
 
             {/* Intensity Slider - Bottom Left, Thin */}
+            {/* Intensity Slider - Right Side, Vertical */}
             <div
                 className="hover-trigger" // Make custom cursor react
                 style={{
                     position: 'fixed',
-                    bottom: '2rem',
-                    left: '2rem',
+                    top: '50%',
+                    right: '-3rem', // Adjust for width rotation
+                    transform: 'translateY(-50%) rotate(-90deg)',
                     zIndex: 100,
                     width: '150px',
                     display: 'flex',
                     alignItems: 'center',
-                    opacity: 0.5,
+                    opacity: 0.3,
                     transition: 'opacity 0.3s',
                     cursor: 'none' // Ensure container also has no cursor
                 }}
                 onMouseEnter={(e) => e.currentTarget.style.opacity = 1}
-                onMouseLeave={(e) => e.currentTarget.style.opacity = 0.5}
+                onMouseLeave={(e) => e.currentTarget.style.opacity = 0.3}
             >
                 <input
                     type="range"

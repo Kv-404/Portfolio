@@ -3,6 +3,27 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
 
+const Redacted = ({ children, delay = 0 }) => {
+    return (
+        <span
+            style={{
+                background: 'var(--text-color)',
+                color: 'transparent',
+                padding: '0 4px',
+                borderRadius: '2px',
+                display: 'inline-block', // Ensures block shape
+                lineHeight: 'inherit',
+                userSelect: 'none', // Prevent selection to peek
+                cursor: 'default'
+            }}
+        >
+            <span style={{ opacity: 0, pointerEvents: 'none' }}>
+                {children}
+            </span>
+        </span>
+    );
+};
+
 const About = () => {
     return (
         <PageTransition>
@@ -66,11 +87,11 @@ const About = () => {
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
                                 <span style={{ opacity: 0.5 }}>LOC:</span>
-                                <span>UNKNOWN_SECTOR</span>
+                                <Redacted>UNKNOWN_SECTOR</Redacted>
                             </div>
                             <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
                                 <span style={{ opacity: 0.5 }}>CLEARANCE:</span>
-                                <span>LEVEL_5</span>
+                                <Redacted>LEVEL_5</Redacted>
                             </div>
                         </div>
                     </div>
@@ -89,21 +110,17 @@ const About = () => {
                                 <span style={{ width: '10px', height: '10px', background: 'var(--accent-color)' }}></span>
                                 BIO_DATA_LOG
                             </h3>
-                            <p style={{ lineHeight: '1.8', opacity: 0.8, fontSize: '1.1rem', maxWidth: '800px' }}>
-                                <DecryptedText
-                                    text="A creative developer focused on building immersive digital experiences. Blending technical precision with artistic direction to create interfaces that feel alive."
-                                    animateOn="view"
-                                    speed={40}
-                                />
-                            </p>
+                            <div style={{ lineHeight: '1.8', opacity: 0.8, fontSize: '1.1rem', maxWidth: '800px' }}>
+                                <Redacted>
+                                    A creative developer focused on building immersive digital experiences. Blending technical precision with artistic direction to create interfaces that feel alive.
+                                </Redacted>
+                            </div>
                             <br />
-                            <p style={{ lineHeight: '1.8', opacity: 0.8, fontSize: '1.1rem', maxWidth: '800px' }}>
-                                <DecryptedText
-                                    text="Specializing in frontend performance, WebGL interactions, and clean architectural patterns. Currently operating in stealth mode, building the next generation of web applications."
-                                    animateOn="view"
-                                    speed={40}
-                                />
-                            </p>
+                            <div style={{ lineHeight: '1.8', opacity: 0.8, fontSize: '1.1rem', maxWidth: '800px' }}>
+                                <Redacted>
+                                    Specializing in frontend performance, WebGL interactions, and clean architectural patterns. Currently operating in stealth mode, building the next generation of web applications.
+                                </Redacted>
+                            </div>
                         </div>
 
                         <div>
@@ -127,7 +144,7 @@ const About = () => {
                                         background: 'rgba(255,255,255,0.05)',
                                         fontFamily: "'Space Mono', monospace"
                                     }}>
-                                        <DecryptedText text={skill} animateOn="view" speed={60} />
+                                        <Redacted>{skill}</Redacted>
                                     </div>
                                 ))}
                             </div>
