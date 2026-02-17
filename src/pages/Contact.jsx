@@ -129,7 +129,7 @@ const Contact = () => {
                         position: 'relative'
                     }}>
                         <a
-                            href="https://www.linkedin.com/in/kaustuv-vats-06869029a/"
+                            href="https://www.linkedin.com/in/kv404"
                             target="_blank"
                             rel="noopener noreferrer"
                             style={{
