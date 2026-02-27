@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
@@ -46,7 +46,14 @@ const Socials = () => {
                     maxWidth: '600px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '2px' // Very tight spacing for terminal look
+                    gap: '4px',
+                    background: 'rgba(10, 10, 10, 0.4)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    padding: '1rem',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
                 }}>
                     {socialLinks.map((link, index) => (
                         <a

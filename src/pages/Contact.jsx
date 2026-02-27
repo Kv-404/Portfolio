@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
 
 const Contact = () => {
-    const [emailBtnText, setEmailBtnText] = useState('INITIATE_COPY');
+    const [emailBtnText, setEmailBtnText] = useState('INITIATE_EMAIL_COPY');
     const [status, setStatus] = useState('IDLE');
     const email = 'kv404@protonmail.com';
 
@@ -17,7 +17,7 @@ const Contact = () => {
             setStatus('SUCCESS');
 
             setTimeout(() => {
-                setEmailBtnText('INITIATE_COPY');
+                setEmailBtnText('INITIATE_EMAIL_COPY');
                 setStatus('IDLE');
             }, 2000);
         }).catch(err => {
@@ -56,7 +56,16 @@ const Contact = () => {
                     <DecryptedText text="< RETURN_ROOT" animateOn="hover" speed={50} />
                 </Link>
 
-                <div className="cyber-card" style={{ maxWidth: '700px', border: 'none', background: 'transparent', boxShadow: 'none' }}>
+                <div className="cyber-card" style={{
+                    maxWidth: '700px',
+                    background: 'rgba(10, 10, 10, 0.4)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '8px',
+                    padding: '2rem',
+                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
+                }}>
                     <div style={{
                         fontFamily: "'Space Mono', monospace",
                         fontSize: '0.9rem',

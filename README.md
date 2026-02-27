@@ -1,52 +1,52 @@
 # KV_404 Portfolio
 
-A futuristic, cyber-themed portfolio website built with React, Three.js, and Framer Motion. Designed to showcase projects and identity with a unique "terminal/classified" aesthetic.
+A futuristic, cyber-themed portfolio website built with React, Three.js, and Framer Motion. Features a "terminal/classified" aesthetic with WebGL dithered backgrounds, custom cursor, scanline overlays, and encrypted text animations.
 
 ## 🚀 Features
 
-- **Immersive UI**: WebGL background, custom cursor, and scanline effects.
-- **Interactive Navigation**: Accordion-style menu with smooth transitions.
-- **Redacted Information**: "Classified" bio and skills that remain hidden (permanent redaction).
-- **Project Archive**: Toggle between College and Personal projects with animated filtering.
-- **Responsive**: Optimized for both desktop and mobile viewing.
+- **Immersive UI**: WebGL dither background with adjustable intensity, custom cursor, scanline overlay
+- **Interactive Navigation**: Accordion-style home menu with smooth Framer Motion transitions
+- **Redacted Identity**: Classified bio and skills on the About page
+- **Project Archive**: Card-based project showcase with status indicators
+- **Custom 404**: Terminal-style error page with live log feed
+- **Responsive**: Optimized for desktop and mobile
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: React, Vite
-- **Styling**: Vanilla CSS, Styled Components logic
-- **Animation**: Framer Motion
-- **Graphics**: Three.js (@react-three/fiber, @react-three/drei)
+- **Framework**: React 19 + Vite
+- **Styling**: Vanilla CSS with CSS custom properties
+- **Animation**: Framer Motion (`motion/react`)
+- **3D/WebGL**: Three.js, @react-three/fiber, @react-three/postprocessing
 - **Routing**: React Router DOM
 
-## 📦 Installation
+## 📦 Getting Started
 
-1.  **Clone the repository**:
-    ```bash
-    git clone https://github.com/Kv-404/Portfolio.git
-    cd Portfolio
-    ```
+```bash
+git clone https://github.com/Kv-404/Portfolio.git
+cd Portfolio
+npm install
+npm run dev
+```
 
-2.  **Install dependencies**:
-    ```bash
-    npm install
-    ```
+## 🚀 Deploy
 
-3.  **Run development server**:
-    ```bash
-    npm run dev
-    ```
+```bash
+npm run build
+```
 
-4.  **Build for production**:
-    ```bash
-    npm run build
-    ```
+Configured for **Vercel** — push to main and it auto-deploys. The `vercel.json` handles SPA rewrites.
 
-## 📂 Project Structure
+## 📂 Structure
 
-- `src/components`: Reusable UI components (Layout, DecryptedText, etc.)
-- `src/pages`: Main page views (Home, About, Projects, etc.)
-- `src/assets`: Static assets
+```
+src/
+├── components/   # Layout, BackgroundCanvas, CustomCursor, Dither, Scanlines, etc.
+├── pages/        # Home, About, Projects, Socials, Contact, NotFound
+├── index.css     # Global styles and design tokens
+├── App.jsx       # Routes
+└── main.jsx      # Entry point
+```
 
-## 🔒 License
+## 📜 License
 
-This project is open source and available under the [MIT License](LICENSE).
+[MIT](LICENSE)

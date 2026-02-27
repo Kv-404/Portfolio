@@ -1,14 +1,12 @@
-
-import React from 'react';
+import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import BackgroundCanvas from './BackgroundCanvas';
 import CustomCursor from './CustomCursor';
-
 import Scanlines from './Scanlines';
 
 const Layout = () => {
     // Default intensity 0.5 (matches current "tuned" look), range 0.0 to 1.0
-    const [ditherIntensity, setDitherIntensity] = React.useState(0.5);
+    const [ditherIntensity, setDitherIntensity] = useState(0.5);
 
     return (
         <>

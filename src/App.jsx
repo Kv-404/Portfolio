@@ -1,5 +1,3 @@
-
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -8,7 +6,6 @@ import Projects from './pages/Projects';
 import Socials from './pages/Socials';
 import Contact from './pages/Contact';
 import NotFound from './pages/NotFound';
-import './index.css'; // Ensure styles are applied
 
 function App() {
   return (
