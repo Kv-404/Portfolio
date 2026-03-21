@@ -1,378 +1,161 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
+import InteractiveTerminal from '../components/InteractiveTerminal';
 
-const Home = () => {
-    const [hoveredIndex, setHoveredIndex] = useState(null);
-    const navigate = useNavigate();
+const stagger = {
+    hidden: { opacity: 0 },
+    show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.3 } }
+};
+const fadeUp = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 40, damping: 14 } }
+};
 
-    const sections = [
-        { id: '01', label: 'PROJECTS', path: '/projects', desc: 'Explore my latest work' },
-        { id: '02', label: 'ABOUT', path: '/about', desc: 'Who I am & what I do' },
-        { id: '03', label: 'SOCIALS', path: '/socials', desc: 'Connect across platforms' },
-        { id: '04', label: 'CONTACT', path: '/contact', desc: 'Get in touch' }
-    ];
+const quickLinks = [
+    { label: 'PROJECTS', to: '/projects', icon: '◈' },
+    { label: 'CAREER', to: '/career', icon: '◇' },
+    { label: 'ABOUT', to: '/about', icon: '◆' },
+    { label: 'SOCIALS', to: '/socials', icon: '◎' },
+    { label: 'CONTACT', to: '/contact', icon: '◉' },
+];
+
+export default function Home() {
+    const [time, setTime] = useState('');
+    const nav = useNavigate();
+
+    useEffect(() => {
+        const tick = () => {
+            const d = new Date();
+            setTime(d.toLocaleTimeString('en-US', { hour12: false }) + '.' + String(d.getMilliseconds()).padStart(3, '0'));
+        };
+        tick();
+        const id = setInterval(tick, 100);
+        return () => clearInterval(id);
+    }, []);
 
     return (
         <PageTransition>
-            <div className="home-container">
-                {/* Header: Logo & Status */}
-                <header className="home-header">
-                    <div className="brand">
-                        <DecryptedText
-                            text="KV"
-                            speed={100}
-                            animateOn="view"
-                            revealDirection="start"
-                            className="brand-text"
-                        />
-                        <span className="brand-sub">Full_stack_developer</span>
+            <div className="page-shell" style={{ justifyContent: 'space-between' }}>
+
+                {/* Top bar */}
+                <header className="topbar">
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '.15rem' }}>
+                        <span className="topbar-brand" style={{ fontSize: '1.1rem' }}>
+                            <DecryptedText text="KV_404" speed={60} animateOn="view" revealDirection="start" />
+                        </span>
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: .4 }}
+                            transition={{ delay: 1.5, duration: .8 }}
+                            className="mono"
+                            style={{ fontSize: '.6rem', letterSpacing: '3px' }}
+                        >
+                            FULL_STACK_OPERATIVE
+                        </motion.span>
                     </div>
-                    <div className="status-indicator">
-                        <div className={`status-dot ${hoveredIndex !== null ? 'active' : ''}`}></div>
-                        <DecryptedText
-                            text={hoveredIndex !== null ? 'INTERACTING...' : 'SYSTEM_ONLINE'}
-                            speed={50}
-                            className="status-text"
-                        />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                        <motion.span
+                            className="mono"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: .3 }}
+                            transition={{ delay: 2 }}
+                            style={{ fontSize: '.6rem', letterSpacing: '1px' }}
+                        >
+                            {time}
+                        </motion.span>
+                        <div className="topbar-status">
+                            <motion.div
+                                className="status-dot"
+                                animate={{ boxShadow: ['0 0 4px rgba(57,255,20,.4)', '0 0 14px rgba(57,255,20,.9)', '0 0 4px rgba(57,255,20,.4)'] }}
+                                transition={{ repeat: Infinity, duration: 2 }}
+                            />
+                            <span>[ONLINE]</span>
+                        </div>
                     </div>
                 </header>
 
-                {/* Main Accordion Navigation */}
-                <main className="accordion-container">
-                    {sections.map((section, index) => (
-                        <motion.div
-                            key={section.id}
-                            className={`accordion-item ${hoveredIndex === index ? 'active' : ''}`}
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
-                            onClick={() => navigate(section.path)}
-                            layout
-                            transition={{ duration: 0.5, ease: [0.25, 1, 0.5, 1] }}
-                        >
-                            <div className="accordion-content">
-                                <div className="accordion-number">
-                                    <DecryptedText text={`//${section.id}`} speed={60} animateOn="view" />
-                                </div>
+                {/* Under Construction Banner */}
+                <motion.div
+                    className="construction-banner"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.8, duration: 0.6 }}
+                >
+                    <span className="construction-banner__text">
+                        ⚠ SITE UNDER CONSTRUCTION — SOME MODULES ARE STILL BEING DEPLOYED — EXPECT GLITCHES
+                    </span>
+                </motion.div>
 
-                                <div className="accordion-text-group">
-                                    <h2 className="accordion-title">
-                                        {/* Render vertical text for inactive, horizontal for active */}
-                                        <span className="title-inner">
-                                            {section.label}
-                                        </span>
-                                    </h2>
+                {/* Main — Split panel */}
+                <main className="home-split">
 
-                                    <AnimatePresence>
-                                        {hoveredIndex === index && (
-                                            <motion.div
-                                                initial={{ opacity: 0, x: -20 }}
-                                                animate={{ opacity: 1, x: 0 }}
-                                                exit={{ opacity: 0, x: -10 }}
-                                                transition={{ duration: 0.3, delay: 0.1 }}
-                                                className="accordion-desc"
-                                            >
-                                                {section.desc}
-                                                <div className="arrow-icon">→</div>
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-
-                                <div className="accordion-bg"></div>
+                    {/* Left: Hero identity */}
+                    <motion.div
+                        className="home-hero"
+                        variants={stagger}
+                        initial="hidden"
+                        animate="show"
+                    >
+                        <motion.div variants={fadeUp} className="home-hero__identity">
+                            <h1 className="home-hero__name">
+                                <DecryptedText text="KV_404" speed={55} animateOn="view" revealDirection="start" />
+                            </h1>
+                            <div className="home-hero__role">
+                                <span className="home-hero__role-dot" />
+                                <DecryptedText text="FULL_STACK_OPERATIVE" speed={35} animateOn="view" revealDirection="start" />
                             </div>
                         </motion.div>
-                    ))}
+
+                        <motion.p variants={fadeUp} className="home-hero__desc mono">
+                            Building immersive digital experiences with code, shaders, and obsessive attention to detail.
+                        </motion.p>
+
+                        {/* Quick nav links */}
+                        <motion.div variants={fadeUp} className="home-hero__nav">
+                            {quickLinks.map((link) => (
+                                <button
+                                    key={link.label}
+                                    className="home-hero__nav-btn btn"
+                                    onClick={() => nav(link.to)}
+                                >
+                                    <span className="home-hero__nav-icon">{link.icon}</span>
+                                    {link.label}
+                                </button>
+                            ))}
+                        </motion.div>
+
+                        <motion.div variants={fadeUp} className="home-hero__hint mono">
+                            <span style={{ color: 'var(--accent)', opacity: .6 }}>TIP:</span> Type <code>help</code> in the terminal →
+                        </motion.div>
+                    </motion.div>
+
+                    {/* Right: Terminal */}
+                    <motion.div
+                        className="home-terminal"
+                        initial={{ opacity: 0, scale: 0.96, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        transition={{ delay: 0.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                        <InteractiveTerminal />
+                    </motion.div>
                 </main>
 
-                <style>{`
-                    .home-container {
-                        width: 100vw;
-                        height: 100vh;
-                        overflow: hidden;
-                        display: flex;
-                        flex-direction: column;
-                        position: relative;
-                        z-index: 10;
-                    }
-
-                    /* Header */
-                    .home-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        padding: 3rem 4rem;
-                        height: 15vh;
-                        box-sizing: border-box;
-                    }
-
-                    .brand {
-                        display: flex;
-                        flex-direction: column;
-                        gap: 0.2rem;
-                    }
-
-                    .brand-text {
-                        font-family: var(--font-heading);
-                        font-size: 2rem;
-                        font-weight: 700;
-                        letter-spacing: -1px;
-                        color: var(--text-color);
-                    }
-
-                    .brand-sub {
-                        font-family: var(--font-body);
-                        font-size: 0.8rem;
-                        opacity: 0.5;
-                        text-transform: uppercase;
-                        letter-spacing: 2px;
-                    }
-
-                    .status-indicator {
-                        display: flex;
-                        align-items: center;
-                        gap: 0.8rem;
-                    }
-
-                    .status-dot {
-                        width: 8px;
-                        height: 8px;
-                        background: #00ff00;
-                        border-radius: 50%;
-                        box-shadow: 0 0 10px #00ff00;
-                        transition: all 0.3s ease;
-                    }
-
-                    .status-dot.active {
-                        background: var(--accent-color);
-                        box-shadow: 0 0 15px var(--accent-color);
-                        animation: blink 0.5s infinite alternate;
-                    }
-
-                    .status-text {
-                        font-family: 'Space Mono', monospace;
-                        font-size: 0.75rem;
-                        opacity: 0.7;
-                        min-width: 100px; /* Prevent jump */
-                        text-align: right;
-                    }
-
-                    /* Accordion */
-                    .accordion-container {
-                        display: flex;
-                        height: 85vh;
-                        width: 100%;
-                        overflow: hidden;
-                        border-top: 1px solid rgba(255, 255, 255, 0.1);
-                    }
-
-                    .accordion-item {
-                        position: relative;
-                        height: 100%;
-                        flex: 1;
-                        border-right: 1px solid rgba(255, 255, 255, 0.1);
-                        cursor: none; /* Custom cursor */
-                        overflow: hidden;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        background: rgba(0, 0, 0, 0);
-                        transition: background 0.4s ease;
-                    }
-
-                    .accordion-item:last-child {
-                        border-right: none;
-                    }
-
-                    .accordion-item:hover, .accordion-item.active {
-                        background: rgba(255, 255, 255, 0.03); 
-                    }
-
-                    .accordion-item.active {
-                        flex: 4; 
-                    }
-
-                    .accordion-content {
-                        position: relative;
-                        width: 100%;
-                        height: 100%;
-                        display: flex;
-                        flex-direction: column;
-                        justify-content: flex-end;
-                        padding: 3rem;
-                        box-sizing: border-box;
-                    }
-
-                    .accordion-number {
-                        position: absolute;
-                        top: 2rem;
-                        left: 2rem; /* Consistent top-left for number */
-                        font-family: var(--font-heading);
-                        font-size: 1rem;
-                        opacity: 0.4;
-                        color: var(--text-color);
-                    }
-
-                    .accordion-text-group {
-                        z-index: 2;
-                        position: absolute;
-                        bottom: 3rem;
-                        left: 3rem;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: flex-start;
-                    }
-
-                    .accordion-title {
-                        font-family: var(--font-heading);
-                        font-weight: 800;
-                        line-height: 1;
-                        color: rgba(255, 255, 255, 0.6);
-                        text-transform: uppercase;
-                        margin: 0;
-                        white-space: nowrap;
-                        font-size: 3rem; 
-                        transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-                        
-                        /* Vertical text logic for inactive items */
-                        writing-mode: vertical-rl;
-                        transform: rotate(180deg);
-                        height: auto;
-                        width: min-content;
-                    }
-
-                    .accordion-item.active .accordion-title {
-                        writing-mode: horizontal-tb;
-                        transform: rotate(0deg);
-                        color: var(--text-color);
-                        font-size: 4rem; /* Reduced to fit better */
-                        /* Allow wrapping or resizing if really needed, but prevent overflow */
-                        max-width: 100%;
-                        text-shadow: 0 0 20px rgba(255,255,255,0.1);
-                        width: auto;
-                    }
-                    
-                    /* Desktop non-active state positioning */
-                    @media (min-width: 901px) {
-                        .accordion-item:not(.active) .accordion-text-group {
-                             bottom: 50%;
-                             left: 50%;
-                             transform: translate(-50%, 50%);
-                        }
-                    }
-
-                    .accordion-desc {
-                        font-family: var(--font-body);
-                        font-size: 1.2rem;
-                        margin-top: 1rem;
-                        color: var(--accent-color);
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
-                    }
-
-                    .accordion-bg {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: linear-gradient(to top, rgba(255,255,255,0.05) 0%, transparent 100%);
-                        opacity: 0;
-                        transition: opacity 0.5s ease;
-                        z-index: 1;
-                    }
-
-                    .accordion-item.active .accordion-bg {
-                        opacity: 1;
-                    }
-
-                    .arrow-icon {
-                        font-size: 1.5rem;
-                        transition: transform 0.3s ease;
-                    }
-
-                    .accordion-item:hover .arrow-icon {
-                        transform: translateX(10px);
-                    }
-
-                    @keyframes blink {
-                        0% { opacity: 0.6; }
-                        100% { opacity: 1; }
-                    }
-
-                    /* Responsive Mobile: Stack vertically */
-                    @media (max-width: 900px) {
-                        .accordion-container {
-                            flex-direction: column;
-                            height: auto;
-                            min-height: 85vh; /* Allow scrolling if needed, or fit */
-                            padding-bottom: 80px; /* Space for range slider */
-                        }
-                        
-                        .home-container {
-                            height: auto;
-                            min-height: 100vh;
-                            overflow-y: auto;
-                        }
-
-                        .accordion-item {
-                            width: 100%;
-                            flex: none; /* Disable flex growth on mobile for simpler stacking or use fixed heights */
-                            height: 15vh; /* Collapsed height */
-                            border-right: none;
-                            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-                            transition: height 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-                        }
-
-                        .accordion-item.active {
-                            height: 40vh; /* Expanded height */
-                            flex: none;
-                        }
-
-                        .accordion-title {
-                            writing-mode: horizontal-tb;
-                            transform: rotate(0deg);
-                            font-size: 2rem;
-                        }
-                        
-                        .accordion-item.active .accordion-title {
-                            font-size: 3rem;
-                        }
-
-                        .accordion-item:not(.active) .accordion-text-group {
-                            bottom: auto;
-                            left: 2rem;
-                            top: 50%;
-                            transform: translateY(-50%);
-                            align-items: flex-start;
-                        }
-                        
-                        .accordion-text-group {
-                             bottom: 2rem;
-                             left: 2rem;
-                             top: auto;
-                             transform: none;
-                        }
-
-                        .accordion-number {
-                            top: 50%;
-                            right: 2rem;
-                            left: auto;
-                            transform: translateY(-50%);
-                        }
-                        
-                        .home-header {
-                            padding: 2rem;
-                            height: auto;
-                        }
-                    }
-                `}</style>
+                {/* Footer */}
+                <motion.footer
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: .3 }}
+                    transition={{ delay: 2.5, duration: 1 }}
+                    className="mono"
+                    style={{ display: 'flex', justifyContent: 'space-between', padding: '1rem 2.5rem', fontSize: '.55rem', letterSpacing: '2px', borderTop: '1px solid var(--border)' }}
+                >
+                    <span>SYS_V2.1</span>
+                    <span style={{ animation: 'flicker 5s infinite' }}>UPTIME: CONTINUOUS</span>
+                    <span>ENCRYPTED_CHANNEL</span>
+                </motion.footer>
             </div>
         </PageTransition>
     );
-};
-
-export default Home;
+}

@@ -203,7 +203,11 @@ export default function DecryptedText({
                     const isRevealedOrDone = revealedIndices.has(index) || !isScrambling || !isHovering;
 
                     return (
-                        <span key={index} className={isRevealedOrDone ? className : encryptedClassName}>
+                        <span 
+                            key={index} 
+                            className={isRevealedOrDone ? className : encryptedClassName} 
+                            style={isRevealedOrDone ? {} : { color: 'var(--accent-color)', textShadow: '0 0 8px var(--accent-color)', opacity: 0.8 }}
+                        >
                             {char}
                         </span>
                     );

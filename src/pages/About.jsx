@@ -1,158 +1,82 @@
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
 
-const Redacted = ({ children, delay = 0 }) => {
-    return (
-        <span
-            style={{
-                background: 'var(--text-color)',
-                color: 'transparent',
-                padding: '0 4px',
-                borderRadius: '2px',
-                display: 'inline-block', // Ensures block shape
-                lineHeight: 'inherit',
-                userSelect: 'none', // Prevent selection to peek
-                cursor: 'default'
-            }}
-        >
-            <span style={{ opacity: 0, pointerEvents: 'none' }}>
-                {children}
-            </span>
-        </span>
-    );
-};
+const Redacted = ({ children }) => (
+    <span style={{ background: 'var(--fg)', color: 'transparent', padding: '0 4px', borderRadius: '1px', userSelect: 'none', display: 'inline-block', lineHeight: 'inherit' }}>
+        <span style={{ opacity: 0, pointerEvents: 'none' }}>{children}</span>
+    </span>
+);
 
-const About = () => {
+const stagger = { hidden: { opacity: 0 }, show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } } };
+const fade = { hidden: { opacity: 0, y: 15 }, show: { opacity: 1, y: 0 } };
+
+const skills = ['REACT', 'NODE.JS', 'THREE.JS', 'FRAMER_MOTION', 'TYPESCRIPT', 'UI/UX', 'POSTGRESQL', 'DOCKER'];
+
+export default function About() {
     return (
         <PageTransition>
-            <main className="container" style={{ alignItems: 'flex-start', paddingTop: '6rem' }}>
-                <div style={{
-                    position: 'fixed',
-                    top: '2rem',
-                    right: '4rem',
-                    textAlign: 'right',
-                    zIndex: 10
-                }}>
-                    <h2 style={{ fontSize: '1rem', opacity: 0.5, letterSpacing: '2px' }}>
+            <div className="page-shell" style={{ padding: '6rem 2.5rem 3rem' }}>
+                <header className="topbar">
+                    <Link to="/" className="btn" style={{ opacity: .7 }}>
+                        <DecryptedText text="< ROOT" animateOn="hover" speed={50} />
+                    </Link>
+                    <span className="topbar-status" style={{ opacity: .5 }}>
                         <DecryptedText text="ABOUT // IDENTITY_FILE" animateOn="view" revealDirection="end" />
-                    </h2>
-                </div>
+                    </span>
+                </header>
 
-                <Link to="/" className="btn btn-outline" style={{
-                    position: 'fixed',
-                    top: '2rem',
-                    left: '2rem',
-                    zIndex: 100,
-                    fontSize: '0.8rem',
-                    opacity: 0.7,
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(0,0,0,0.8)'
-                }}>
-                    <DecryptedText text="< RETURN_ROOT" animateOn="hover" speed={50} />
-                </Link>
+                <motion.div variants={stagger} initial="hidden" animate="show" style={{ width: '100%', maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: '280px 1fr', gap: '3rem', alignItems: 'start' }}>
 
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'minmax(300px, 1fr) 2fr',
-                    gap: '4rem',
-                    width: '100%',
-                    alignItems: 'start'
-                }}>
-                    {/* Left Column: Stats & ID */}
-                    <div className="cyber-card">
-                        <div style={{ marginBottom: '2rem', textAlign: 'center' }}>
-                            <div style={{
-                                width: '100px',
-                                height: '100px',
-                                background: 'rgba(255,255,255,0.1)',
-                                borderRadius: '50%',
-                                margin: '0 auto 1rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                border: '1px solid rgba(255,255,255,0.2)'
-                            }}>
-                                <span style={{ fontSize: '2rem' }}>KV</span>
-                            </div>
-                            <h3 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>KV_404</h3>
-                            <p style={{ fontSize: '0.8rem', opacity: 0.6 }}>FULL_STACK_DEV</p>
+                    {/* Left — ID Card */}
+                    <motion.div variants={fade} className="card" style={{ textAlign: 'center' }}>
+                        <div style={{ width: 90, height: 90, borderRadius: '50%', border: '1px solid rgba(57,255,20,.2)', background: 'rgba(255,255,255,.05)', margin: '0 auto 1rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <span style={{ fontSize: '1.8rem', fontWeight: 700, color: 'var(--accent)' }}>KV</span>
                         </div>
+                        <h3 style={{ fontSize: '1.3rem', marginBottom: '.3rem' }}>KV_404</h3>
+                        <p className="mono" style={{ fontSize: '.7rem', opacity: .5, marginBottom: '1.5rem' }}>FULL_STACK_OPERATIVE</p>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem', fontSize: '0.9rem' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
-                                <span style={{ opacity: 0.5 }}>STATUS:</span>
-                                <span style={{ color: '#0f0' }}>ONLINE</span>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
-                                <span style={{ opacity: 0.5 }}>LOC:</span>
-                                <Redacted>UNKNOWN_SECTOR</Redacted>
-                            </div>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '0.5rem' }}>
-                                <span style={{ opacity: 0.5 }}>CLEARANCE:</span>
-                                <Redacted>LEVEL_5</Redacted>
-                            </div>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '.6rem', fontSize: '.8rem', textAlign: 'left' }}>
+                            {[
+                                ['STATUS', <span style={{ color: 'var(--accent)' }}>ONLINE</span>],
+                                ['LOC', <Redacted>UNKNOWN_SECTOR</Redacted>],
+                                ['CLEARANCE', <Redacted>LEVEL_5</Redacted>],
+                            ].map(([label, val], i) => (
+                                <div key={i} style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid var(--border)', paddingBottom: '.4rem' }}>
+                                    <span style={{ opacity: .4 }}>{label}:</span>
+                                    {val}
+                                </div>
+                            ))}
                         </div>
-                    </div>
+                    </motion.div>
 
-                    {/* Right Column: Bio & Modules */}
+                    {/* Right — Bio & Skills */}
                     <div>
-                        <div style={{ marginBottom: '3rem' }}>
-                            <h3 style={{
-                                fontSize: '1rem',
-                                marginBottom: '1rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                opacity: 0.7
-                            }}>
-                                <span style={{ width: '10px', height: '10px', background: 'var(--accent-color)' }}></span>
-                                BIO_DATA_LOG
-                            </h3>
-                            <div style={{ lineHeight: '1.8', opacity: 0.8, fontSize: '1.1rem', maxWidth: '800px' }}>
-                                <Redacted>
-                                    A creative developer focused on building immersive digital experiences. Blending technical precision with artistic direction to create interfaces that feel alive.
-                                </Redacted>
+                        <motion.div variants={fade} style={{ marginBottom: '2.5rem' }}>
+                            <div className="section-hdr"><span className="dot" /> BIO_DATA_LOG</div>
+                            <div style={{ lineHeight: 1.8, opacity: .75, fontSize: '1rem', maxWidth: 700 }}>
+                                <Redacted>A creative developer focused on building immersive digital experiences. Blending technical precision with artistic direction to create interfaces that feel alive.</Redacted>
                             </div>
                             <br />
-                            <div style={{ lineHeight: '1.8', opacity: 0.8, fontSize: '1.1rem', maxWidth: '800px' }}>
-                                <Redacted>
-                                    Specializing in frontend performance, WebGL interactions, and clean architectural patterns. Currently operating in stealth mode, building the next generation of web applications.
-                                </Redacted>
+                            <div style={{ lineHeight: 1.8, opacity: .75, fontSize: '1rem', maxWidth: 700 }}>
+                                <Redacted>Specializing in frontend performance, WebGL interactions, and clean architectural patterns. Currently operating in stealth mode.</Redacted>
                             </div>
-                        </div>
+                        </motion.div>
 
-                        <div>
-                            <h3 style={{
-                                fontSize: '1rem',
-                                marginBottom: '1.5rem',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.5rem',
-                                opacity: 0.7
-                            }}>
-                                <span style={{ width: '10px', height: '10px', background: 'var(--accent-color)' }}></span>
-                                EQUIPPED_MODULES
-                            </h3>
-                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-                                {['REACT', 'NODE.JS', 'THREE.JS', 'FRAMER_MOTION', 'TYPESCRIPT', 'UI/UX', 'POSTGRESQL', 'DOCKER'].map(skill => (
-                                    <div key={skill} style={{
-                                        border: '1px solid rgba(255,255,255,0.2)',
-                                        padding: '0.5rem 1rem',
-                                        fontSize: '0.8rem',
-                                        background: 'rgba(255,255,255,0.05)',
-                                        fontFamily: "'Space Mono', monospace"
-                                    }}>
-                                        <Redacted>{skill}</Redacted>
+                        <motion.div variants={fade}>
+                            <div className="section-hdr"><span className="dot" /> EQUIPPED_MODULES</div>
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '.8rem' }}>
+                                {skills.map(s => (
+                                    <div key={s} className="card" style={{ padding: '.45rem .9rem' }}>
+                                        <Redacted>{s}</Redacted>
                                     </div>
                                 ))}
                             </div>
-                        </div>
+                        </motion.div>
                     </div>
-                </div>
-            </main>
+                </motion.div>
+            </div>
         </PageTransition>
     );
-};
-
-export default About;
+}

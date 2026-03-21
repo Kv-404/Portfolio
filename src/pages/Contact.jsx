@@ -3,176 +3,93 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
 
-const Contact = () => {
-    const [emailBtnText, setEmailBtnText] = useState('INITIATE_EMAIL_COPY');
+export default function Contact() {
+    const [btnText, setBtnText] = useState('COPY_EMAIL');
     const [status, setStatus] = useState('IDLE');
     const email = 'kv404@protonmail.com';
 
-    const handleEmailClick = () => {
+    const copy = () => {
         setStatus('PROCESSING');
-        setEmailBtnText('ACCESSING_CLIPBOARD...');
-
+        setBtnText('ACCESSING_CLIPBOARD...');
         navigator.clipboard.writeText(email).then(() => {
-            setEmailBtnText('ADDRESS_SECURED');
+            setBtnText('SECURED ✓');
             setStatus('SUCCESS');
-
-            setTimeout(() => {
-                setEmailBtnText('INITIATE_EMAIL_COPY');
-                setStatus('IDLE');
-            }, 2000);
-        }).catch(err => {
-            console.error('Failed to copy: ', err);
+            setTimeout(() => { setBtnText('COPY_EMAIL'); setStatus('IDLE'); }, 2000);
+        }).catch(() => {
             window.location.href = `mailto:${email}`;
-            setEmailBtnText('MAIL_CLIENT_OPENED');
+            setBtnText('MAIL_CLIENT_OPENED');
             setStatus('WARN');
         });
     };
 
     return (
         <PageTransition>
-            <main className="container">
-                <div style={{
-                    position: 'fixed',
-                    top: '2rem',
-                    right: '4rem',
-                    textAlign: 'right',
-                    zIndex: 10
-                }}>
-                    <h2 style={{ fontSize: '1rem', opacity: 0.5, letterSpacing: '2px' }}>
+            <div className="page-shell" style={{ justifyContent: 'center', alignItems: 'center', padding: '6rem 2.5rem 3rem' }}>
+                <header className="topbar">
+                    <Link to="/" className="btn" style={{ opacity: .7 }}>
+                        <DecryptedText text="< ROOT" animateOn="hover" speed={50} />
+                    </Link>
+                    <span className="topbar-status" style={{ opacity: .5 }}>
                         <DecryptedText text="CONTACT // UPLINK" animateOn="view" revealDirection="end" />
-                    </h2>
-                </div>
+                    </span>
+                </header>
 
-                <Link to="/" className="btn btn-outline" style={{
-                    position: 'fixed',
-                    top: '2rem',
-                    left: '2rem',
-                    zIndex: 100,
-                    fontSize: '0.8rem',
-                    opacity: 0.7,
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(0,0,0,0.8)'
-                }}>
-                    <DecryptedText text="< RETURN_ROOT" animateOn="hover" speed={50} />
-                </Link>
+                <div className="card" style={{ maxWidth: 650, width: '100%' }}>
 
-                <div className="cyber-card" style={{
-                    maxWidth: '700px',
-                    background: 'rgba(10, 10, 10, 0.4)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '8px',
-                    padding: '2rem',
-                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
-                }}>
-                    <div style={{
-                        fontFamily: "'Space Mono', monospace",
-                        fontSize: '0.9rem',
-                        marginBottom: '2rem',
-                        borderLeft: '2px solid var(--accent-color)',
-                        paddingLeft: '1rem',
-                        opacity: 0.8
-                    }}>
+                    {/* Terminal preamble */}
+                    <div className="mono" style={{ fontSize: '.8rem', marginBottom: '2rem', borderLeft: '2px solid var(--accent)', paddingLeft: '1rem', opacity: .7 }}>
                         <p>&gt; ESTABLISHING SECURE CONNECTION...</p>
                         <p>&gt; ENCRYPTION: AES-256</p>
                         <p>&gt; TARGET: KV_404</p>
                         <p>&gt; STATUS: READY</p>
                     </div>
 
-                    <div style={{ marginBottom: '3rem', textAlign: 'center' }}>
-                        <h1 style={{ fontSize: '4rem', lineHeight: '1', marginBottom: '1rem' }}>
+                    <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+                        <h1 style={{ fontSize: '3.5rem', lineHeight: 1, marginBottom: '.8rem' }}>
                             <DecryptedText text="HELLO_WORLD" animateOn="view" speed={100} />
                         </h1>
-                        <p style={{ maxWidth: '400px', margin: '0 auto', opacity: 0.7 }}>
+                        <p style={{ maxWidth: 400, margin: '0 auto', opacity: .6, fontSize: '.9rem' }}>
                             Open to collaborations, freelance commissions, and classified operations.
                         </p>
                     </div>
 
-                    <div style={{
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        padding: '2px',
-                        background: 'rgba(0,0,0,0.5)',
-                        position: 'relative'
-                    }}>
-                        <button
-                            onClick={handleEmailClick}
-                            style={{
-                                width: '100%',
-                                background: status === 'SUCCESS' ? 'var(--accent-color)' : 'transparent',
-                                color: status === 'SUCCESS' ? '#000' : '#fff',
-                                border: 'none',
-                                padding: '1.5rem',
-                                fontFamily: "'Space Mono', monospace",
-                                fontSize: '1rem',
-                                cursor: 'none',
-                                transition: 'all 0.2s ease',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                            }}
-                            onMouseEnter={(e) => {
-                                if (status !== 'SUCCESS') {
-                                    e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                                }
-                            }}
-                            onMouseLeave={(e) => {
-                                if (status !== 'SUCCESS') {
-                                    e.currentTarget.style.background = 'transparent';
-                                }
-                            }}
+                    {/* Email button */}
+                    <div style={{ border: '1px solid var(--border)', background: 'rgba(0,0,0,.4)', marginBottom: '.8rem' }}>
+                        <button onClick={copy} style={{
+                            width: '100%', background: status === 'SUCCESS' ? 'var(--accent)' : 'transparent',
+                            color: status === 'SUCCESS' ? '#000' : 'var(--fg)', border: 'none', padding: '1.2rem 1.5rem',
+                            fontFamily: "var(--mono)", fontSize: '.9rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            transition: 'all .2s'
+                        }}
+                            onMouseEnter={e => { if (status !== 'SUCCESS') e.currentTarget.style.background = 'rgba(57,255,20,.04)'; }}
+                            onMouseLeave={e => { if (status !== 'SUCCESS') e.currentTarget.style.background = 'transparent'; }}
                         >
-                            <span style={{ display: 'flex', gap: '1rem' }}>
-                                <span style={{ opacity: 0.5 }}>$</span>
-                                <DecryptedText text={emailBtnText} animateOn="none" speed={20} />
+                            <span style={{ display: 'flex', gap: '.8rem' }}>
+                                <span style={{ opacity: .5 }}>$</span>
+                                <DecryptedText text={btnText} animateOn="none" speed={20} />
                             </span>
                             <span>[{status}]</span>
                         </button>
                     </div>
 
-                    <div style={{
-                        marginTop: '1rem',
-                        border: '1px solid rgba(255,255,255,0.2)',
-                        padding: '2px',
-                        background: 'rgba(0,0,0,0.5)',
-                        position: 'relative'
-                    }}>
-                        <a
-                            href="https://www.linkedin.com/in/kv404"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{
-                                width: '100%',
-                                background: 'transparent',
-                                color: '#fff',
-                                textDecoration: 'none',
-                                padding: '1.5rem',
-                                fontFamily: "'Space Mono', monospace",
-                                fontSize: '1rem',
-                                cursor: 'none',
-                                transition: 'all 0.2s ease',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center'
-                            }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'transparent';
-                            }}
+                    {/* LinkedIn */}
+                    <div style={{ border: '1px solid var(--border)', background: 'rgba(0,0,0,.4)' }}>
+                        <a href="https://www.linkedin.com/in/kv404" target="_blank" rel="noopener noreferrer" style={{
+                            display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                            padding: '1.2rem 1.5rem', fontFamily: 'var(--mono)', fontSize: '.9rem', transition: 'background .2s'
+                        }}
+                            onMouseEnter={e => e.currentTarget.style.background = 'rgba(57,255,20,.04)'}
+                            onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                         >
-                            <span style={{ display: 'flex', gap: '1rem' }}>
-                                <span style={{ opacity: 0.5 }}>$</span>
-                                <DecryptedText text="ESTABLISH_LINKEDIN_UPLINK" animateOn="hover" speed={40} />
+                            <span style={{ display: 'flex', gap: '.8rem' }}>
+                                <span style={{ opacity: .5 }}>$</span>
+                                <DecryptedText text="LINKEDIN_UPLINK" animateOn="hover" speed={40} />
                             </span>
                             <span>[CONNECT]</span>
                         </a>
                     </div>
                 </div>
-            </main>
+            </div>
         </PageTransition>
     );
-};
-
-export default Contact;
+}

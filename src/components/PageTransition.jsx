@@ -18,12 +18,12 @@ const PageTransition = ({ children, className = '' }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 20, filter: 'blur(10px)' }}
-            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-            exit={{ opacity: 0, y: -20, filter: 'blur(10px)' }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
             transition={{
-                duration: 0.6,
-                ease: [0.22, 1, 0.36, 1] // Custom cubic bezier for smooth "cyber" feel
+                duration: 0.8,
+                ease: [0.16, 1, 0.3, 1]
             }}
             className={className}
             style={{ width: '100%', display: 'flex', justifyContent: 'center' }}

@@ -3,120 +3,57 @@ import { Link } from 'react-router-dom';
 import PageTransition from '../components/PageTransition';
 import DecryptedText from '../components/DecryptedText';
 
-const Socials = () => {
-    const socialLinks = [
-        { name: 'X_TWITTER', url: 'https://x.com/Kv404_', id: 'NET-01', status: 'ACTIVE' },
-        { name: 'INSTAGRAM', url: 'https://www.instagram.com/theycallmekv__/', id: 'NET-02', status: 'ACTIVE' },
-        { name: 'BLUESKY', url: 'https://bsky.app/profile/kv404.dev', id: 'NET-03', status: 'STANDBY' },
-        { name: 'SPOTIFY', url: 'https://open.spotify.com/user/31wls23lf323kkxjxa73pieq2owy?si=306bac6302ae4fa9', id: 'AUDIO-01', status: 'LISTENING' }
-    ];
+const socials = [
+    { name: 'X_TWITTER', url: 'https://x.com/Kv404_', id: 'NET-01', status: 'ACTIVE' },
+    { name: 'INSTAGRAM', url: 'https://www.instagram.com/theycallmekv__/', id: 'NET-02', status: 'ACTIVE' },
+    { name: 'BLUESKY', url: 'https://bsky.app/profile/kv404.dev', id: 'NET-03', status: 'STANDBY' },
+    { name: 'SPOTIFY', url: 'https://open.spotify.com/user/31wls23lf323kkxjxa73pieq2owy?si=306bac6302ae4fa9', id: 'AUDIO-01', status: 'LISTENING' }
+];
 
-    const [hoveredIndex, setHoveredIndex] = useState(null);
+export default function Socials() {
+    const [hovered, setHovered] = useState(null);
 
     return (
         <PageTransition>
-            <main className="container" style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <div style={{
-                    position: 'fixed',
-                    top: '2rem',
-                    right: '4rem',
-                    textAlign: 'right',
-                    zIndex: 10
-                }}>
-                    <h2 style={{ fontSize: '1rem', opacity: 0.5, letterSpacing: '2px' }}>
-                        <DecryptedText text="NETWORK // CONNECT" animateOn="view" revealDirection="end" />
-                    </h2>
-                </div>
+            <div className="page-shell" style={{ justifyContent: 'center', alignItems: 'center', padding: '6rem 2.5rem 3rem' }}>
+                <header className="topbar">
+                    <Link to="/" className="btn" style={{ opacity: .7 }}>
+                        <DecryptedText text="< ROOT" animateOn="hover" speed={50} />
+                    </Link>
+                    <span className="topbar-status" style={{ opacity: .5 }}>
+                        <DecryptedText text="NETWORK // UPLINKS" animateOn="view" revealDirection="end" />
+                    </span>
+                </header>
 
-                <Link to="/" className="btn btn-outline" style={{
-                    position: 'fixed',
-                    top: '2rem',
-                    left: '2rem',
-                    zIndex: 100,
-                    fontSize: '0.8rem',
-                    opacity: 0.7,
-                    backdropFilter: 'blur(10px)',
-                    background: 'rgba(0,0,0,0.8)'
-                }}>
-                    <DecryptedText text="< RETURN_ROOT" animateOn="hover" speed={50} />
-                </Link>
-
-                <div style={{
-                    width: '100%',
-                    maxWidth: '600px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '4px',
-                    background: 'rgba(10, 10, 10, 0.4)',
-                    backdropFilter: 'blur(12px)',
-                    WebkitBackdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '8px',
-                    padding: '1rem',
-                    boxShadow: '0 4px 30px rgba(0, 0, 0, 0.5)'
-                }}>
-                    {socialLinks.map((link, index) => (
-                        <a
-                            key={link.id}
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
+                <div className="card" style={{ width: '100%', maxWidth: 600, padding: '1rem', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                    {socials.map((s, i) => (
+                        <a key={s.id} href={s.url} target="_blank" rel="noopener noreferrer"
                             style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                padding: '1.5rem 1rem',
-                                textDecoration: 'none',
-                                cursor: 'none',
-                                position: 'relative',
-                                background: hoveredIndex === index ? 'rgba(255,255,255,0.05)' : 'transparent',
-                                borderLeft: hoveredIndex === index ? '4px solid var(--accent-color)' : '2px solid transparent',
-                                transition: 'all 0.3s ease'
+                                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                                padding: '1.3rem 1rem', textDecoration: 'none', cursor: 'none', position: 'relative',
+                                background: hovered === i ? 'rgba(57,255,20,.04)' : 'transparent',
+                                borderLeft: hovered === i ? '3px solid var(--accent)' : '3px solid transparent',
+                                transition: 'all .25s'
                             }}
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
+                            onMouseEnter={() => setHovered(i)}
+                            onMouseLeave={() => setHovered(null)}
                         >
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-                                <span style={{
-                                    fontFamily: "'Space Mono', monospace",
-                                    fontSize: '0.8rem',
-                                    opacity: hoveredIndex === index ? 1 : 0.4,
-                                    width: '60px',
-                                    color: hoveredIndex === index ? 'var(--accent-color)' : 'var(--text-color)',
-                                    transition: 'all 0.3s ease'
-                                }}>
-                                    {link.id}
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                                <span className="mono" style={{ fontSize: '.7rem', opacity: hovered === i ? 1 : .3, color: hovered === i ? 'var(--accent)' : 'var(--fg)', width: '55px', transition: 'all .25s' }}>
+                                    {s.id}
                                 </span>
-                                <span style={{
-                                    fontSize: '2rem',
-                                    fontWeight: 'bold',
-                                    opacity: hoveredIndex === index ? 1 : 0.7,
-                                    letterSpacing: hoveredIndex === index ? '2px' : '0px',
-                                    transition: 'all 0.3s ease'
-                                }}>
-                                    {link.name}
+                                <span style={{ fontSize: '1.6rem', fontWeight: 700, opacity: hovered === i ? 1 : .6, letterSpacing: hovered === i ? '2px' : '0', transition: 'all .3s' }}>
+                                    {s.name}
                                 </span>
                             </div>
-
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '1rem',
-                                opacity: hoveredIndex === index ? 1 : 0,
-                                transform: hoveredIndex === index ? 'translateX(0)' : 'translateX(-20px)',
-                                transition: 'all 0.3s ease'
-                            }}>
-                                <span style={{ fontSize: '0.7rem', color: 'var(--accent-color)', fontFamily: "'Space Mono', monospace" }}>
-                                    [{link.status}]
-                                </span>
-                                <span style={{ fontSize: '1.2rem' }}>&nearr;</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '.8rem', opacity: hovered === i ? 1 : 0, transform: hovered === i ? 'translateX(0)' : 'translateX(-15px)', transition: 'all .3s' }}>
+                                <span className="tag">[{s.status}]</span>
+                                <span style={{ fontSize: '1rem' }}>↗</span>
                             </div>
                         </a>
                     ))}
                 </div>
-            </main>
+            </div>
         </PageTransition>
     );
-};
-
-export default Socials;
+}

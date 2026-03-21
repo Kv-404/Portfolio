@@ -12,9 +12,9 @@ const Scanlines = () => {
             pointerEvents: 'none',
             zIndex: 9998,
             overflow: 'hidden',
-            background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))',
+            background: 'linear-gradient(rgba(0, 0, 0, 0) 50%, rgba(0, 0, 0, 0.15) 50%), linear-gradient(90deg, rgba(57, 255, 20, 0.03), rgba(0, 0, 0, 0.01), rgba(57, 255, 20, 0.03))',
             backgroundSize: '100% 2px, 3px 100%',
-            opacity: 0.6
+            opacity: 0.35
         }} />
     );
 };

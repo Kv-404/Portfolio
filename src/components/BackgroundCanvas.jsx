@@ -1,9 +1,6 @@
-import Dither from './Dither';
+import FaultyTerminal from './FaultyTerminal';
 
 const BackgroundCanvas = ({ intensity = 0.5 }) => {
-  const amplitude = intensity * 0.6;
-  const speed = intensity * 0.04;
-
   return (
     <div
       id="bgCanvas"
@@ -14,18 +11,27 @@ const BackgroundCanvas = ({ intensity = 0.5 }) => {
         width: '100%',
         height: '100%',
         zIndex: -1,
+        background: '#000'
       }}
     >
-      <Dither
-        waveColor={[0.5, 0.5, 0.5]}
-        disableAnimation={false}
-        enableMouseInteraction={true}
-        mouseRadius={0.25}
-        colorNum={6}
-        pixelSize={3}
-        waveAmplitude={amplitude}
-        waveFrequency={1.0}
-        waveSpeed={speed}
+      <FaultyTerminal
+        scale={1.5}
+        gridMul={[2, 1]}
+        digitSize={1.2}
+        timeScale={0.3 + intensity * 0.2}
+        pause={false}
+        scanlineIntensity={0.5}
+        glitchAmount={1}
+        flickerAmount={0.6 + intensity * 0.4}
+        noiseAmp={0.5 + intensity * 0.5}
+        chromaticAberration={0}
+        dither={0}
+        curvature={0.08}
+        tint="#A7EF9E"
+        mouseReact
+        mouseStrength={0.5}
+        pageLoadAnimation
+        brightness={0.5 + intensity * 0.3}
       />
     </div>
   );
