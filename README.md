@@ -61,3 +61,7 @@ without a token. It hides only if that feed is unreachable.
 
 Interface sound is off by default and can be enabled from the command menu.
 All motion respects `prefers-reduced-motion`.
+
+## License
+
+[MIT](LICENSE) © 2026 Kv.
