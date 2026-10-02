@@ -136,7 +136,7 @@ export function GitHubActivity() {
 
         {activities ? (
           <ContributionGraph
-            className="mx-auto font-mono"
+            className="font-mono"
             data={activities}
             totalCount={total}
             fontSize={11}

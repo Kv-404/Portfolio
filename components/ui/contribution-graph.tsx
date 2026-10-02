@@ -5,6 +5,7 @@ import {
   differenceInCalendarDays,
   eachDayOfInterval,
   formatISO,
+  getDate,
   getDay,
   getMonth,
   getYear,
@@ -191,48 +192,57 @@ const getMonthLabels = (
   weeks: Week[],
   monthNames: string[] = DEFAULT_MONTH_LABELS
 ): MonthLabel[] => {
-  return weeks
-    .reduce<MonthLabel[]>((labels, week, weekIndex) => {
-      const firstActivity = week.find((activity) => activity !== undefined);
+  const labels: MonthLabel[] = [];
 
-      if (!firstActivity) {
-        throw new Error(
-          `Unexpected error: Week ${weekIndex + 1} is empty: [${week}].`
-        );
-      }
+  weeks.forEach((week, weekIndex) => {
+    const firstOfMonth = week.find(
+      (activity) =>
+        activity !== undefined && getDate(parseISO(activity.date)) === 1
+    );
+    // Name the month on the column that contains its first day, so the
+    // label lines up with that month's first cell. The earliest day of a
+    // week is often still the previous month, which parked the label one
+    // column to the right. The opening week is named too when the range
+    // starts mid-month and has no 1st of its own.
+    const activity =
+      firstOfMonth ??
+      (weekIndex === 0
+        ? week.find((activity) => activity !== undefined)
+        : undefined);
 
-      const month = monthNames[getMonth(parseISO(firstActivity.date))];
+    if (!activity) return;
 
-      if (!month) {
-        const monthName = new Date(firstActivity.date).toLocaleString("en-US", {
-          month: "short",
-        });
-        throw new Error(
-          `Unexpected error: undefined month label for ${monthName}.`
-        );
-      }
+    const month = monthNames[getMonth(parseISO(activity.date))];
 
-      const prevLabel = labels.at(-1);
+    if (!month) {
+      const monthName = new Date(activity.date).toLocaleString("en-US", {
+        month: "short",
+      });
+      throw new Error(
+        `Unexpected error: undefined month label for ${monthName}.`
+      );
+    }
 
-      if (weekIndex === 0 || !prevLabel || prevLabel.label !== month) {
-        return labels.concat({ weekIndex, label: month });
-      }
+    const prevLabel = labels.at(-1);
 
-      return labels;
-    }, [])
-    .filter(({ weekIndex }, index, labels) => {
-      const minWeeks = 3;
+    if (!prevLabel || prevLabel.label !== month) {
+      labels.push({ weekIndex, label: month });
+    }
+  });
 
-      if (index === 0) {
-        return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks;
-      }
+  return labels.filter(({ weekIndex }, index, labels) => {
+    const minWeeks = 3;
 
-      if (index === labels.length - 1) {
-        return weeks.slice(weekIndex).length >= minWeeks;
-      }
+    if (index === 0) {
+      return labels[1] && labels[1].weekIndex - weekIndex >= minWeeks;
+    }
 
-      return true;
-    });
+    if (index === labels.length - 1) {
+      return weeks.slice(weekIndex).length >= minWeeks;
+    }
+
+    return true;
+  });
 };
 
 export type ContributionGraphProps = HTMLAttributes<HTMLDivElement> & {
