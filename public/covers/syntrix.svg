@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <rect width="1200" height="750" fill="#16130f"/>
+  <polyline fill="none" stroke="#e2a23a" stroke-width="6" stroke-linejoin="round" stroke-linecap="round" points="80,400 160,400 200,250 250,520 310,300 360,460 420,340 490,410 560,180 630,560 700,320 760,430 830,280 900,470 970,360 1040,400 1120,400"/>
+  <text x="80" y="140" fill="#f6f1e7" font-family="ui-sans-serif, system-ui, sans-serif" font-size="64" font-weight="650" letter-spacing="1">Syntrix</text>
+  <text x="80" y="188" fill="#a89880" font-family="ui-monospace, monospace" font-size="22">modular synth · stays in the browser</text>
+</svg>

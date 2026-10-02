@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <rect width="1200" height="750" fill="#121820"/>
+  <g stroke="#8eb0e8" stroke-width="3" fill="none">
+    <line x1="760" y1="220" x2="980" y2="300"/>
+    <line x1="760" y1="220" x2="900" y2="480"/>
+    <line x1="980" y1="300" x2="1080" y2="460"/>
+    <line x1="900" y1="480" x2="1080" y2="460"/>
+    <line x1="760" y1="220" x2="640" y2="360"/>
+  </g>
+  <g fill="#dbe7ff">
+    <circle cx="760" cy="220" r="16"/>
+    <circle cx="980" cy="300" r="16"/>
+    <circle cx="900" cy="480" r="16"/>
+    <circle cx="1080" cy="460" r="16"/>
+    <circle cx="640" cy="360" r="16"/>
+  </g>
+  <circle cx="760" cy="220" r="7" fill="#3b6fe0"/>
+  <text x="72" y="150" fill="#f4f7fb" font-family="ui-sans-serif, system-ui, sans-serif" font-size="64" font-weight="650">BuzzLink</text>
+  <text x="72" y="198" fill="#93a4bd" font-family="ui-monospace, monospace" font-size="22">c++ · trie · graph · search</text>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <rect width="1200" height="750" fill="#e7f0e2"/>
+  <circle cx="920" cy="390" r="150" fill="#c5d9bc"/>
+  <circle cx="920" cy="390" r="70" fill="#f7faf4"/>
+  <text x="80" y="160" fill="#1d2a1c" font-family="ui-sans-serif, system-ui, sans-serif" font-size="64" font-weight="650">RenewYou</text>
+  <text x="80" y="208" fill="#4d6250" font-family="ui-monospace, monospace" font-size="22">html · css · javascript</text>
+</svg>
