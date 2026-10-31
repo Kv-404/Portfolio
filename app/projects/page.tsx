@@ -9,7 +9,7 @@ import {
 } from "@/lib/content/site"
 
 const description =
-  "Clock-It, a browser clock built by Kv in TypeScript and GLSL."
+  "Projects and systems built by Kv, including Aayam and Clock-It."
 
 export const metadata: Metadata = {
   title: "Projects",

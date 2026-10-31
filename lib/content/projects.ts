@@ -17,6 +17,20 @@ export type Project = {
  */
 export const projects: Project[] = [
   {
+    slug: "aayam",
+    title: "Aayam",
+    subheading: "Live college timetable platform",
+    description:
+      "A live timetable application reading university spreadsheets in real-time, with cohort PIN access, Google OAuth faculty auth, and calendar export.",
+    image: "/covers/aayam.svg",
+    links: {
+      website: "https://Aayam.kv404.dev",
+      github: "https://github.com/Kv-404/Aayam",
+    },
+    technologies: ["React", "TypeScript", "Tailwind CSS", "PostgreSQL", "Node.js"],
+    status: "live",
+  },
+  {
     slug: "clock-it",
     title: "Clock-It",
     subheading: "A clock drawn with shaders",

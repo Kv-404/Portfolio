@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 750">
+  <defs>
+    <radialGradient id="aayam-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.16"/>
+      <stop offset="70%" stop-color="#38bdf8" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#0b0f17" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="facet-primary" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="facet-plane" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#0284c7"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="750" fill="#0b0f17"/>
+
+  <!-- Subtle glow -->
+  <circle cx="860" cy="375" r="280" fill="url(#aayam-glow)"/>
+
+  <!-- Timetable schedule matrix grid lines -->
+  <g stroke="#1e293b" stroke-width="1.5" stroke-dasharray="4 6" opacity="0.65">
+    <line x1="620" y1="195" x2="1100" y2="195"/>
+    <line x1="620" y1="285" x2="1100" y2="285"/>
+    <line x1="620" y1="375" x2="1100" y2="375"/>
+    <line x1="620" y1="465" x2="1100" y2="465"/>
+    <line x1="620" y1="555" x2="1100" y2="555"/>
+    <line x1="690" y1="150" x2="690" y2="600"/>
+    <line x1="860" y1="150" x2="860" y2="600"/>
+    <line x1="1030" y1="150" x2="1030" y2="600"/>
+  </g>
+
+  <!-- Aayam Isometric Dimensional Monogram -->
+  <g transform="translate(860, 375) scale(13.5) translate(-16, -16)">
+    <!-- Left Ascending Facet (Space / Origin) -->
+    <path d="M16 3.5L5 27h5.8l2.8-6.2L16 14.5V3.5z" fill="url(#facet-primary)"/>
+    <!-- Right Ascending Facet (Time / Dimension Depth) -->
+    <path d="M16 3.5v11l2.4 6.3 2.8 6.2H27L16 3.5z" fill="#f8fafc" fill-opacity="0.55"/>
+    <!-- Isometric Crossbar (Temporal Plane) -->
+    <polygon points="10.5,18.5 16,15.3 21.5,18.5 16,21.7" fill="url(#facet-plane)" fill-opacity="0.95"/>
+    <polygon points="10.5,18.5 16,21.7 16,23.3 10.5,20.1" fill="#38bdf8" fill-opacity="0.45"/>
+    <polygon points="16,21.7 21.5,18.5 21.5,20.1 16,23.3" fill="#0284c7" fill-opacity="0.65"/>
+  </g>
+
+  <!-- Typography -->
+  <text x="80" y="160" fill="#fafafa" font-family="ui-sans-serif, system-ui, sans-serif" font-size="64" font-weight="650">Aayam</text>
+  <text x="325" y="156" fill="#64748b" font-family="system-ui, sans-serif" font-size="34" font-weight="500">आयाम</text>
+  <text x="80" y="208" fill="#94a3b8" font-family="ui-monospace, monospace" font-size="22">react · typescript · neon postgres · tailwind</text>
+</svg>

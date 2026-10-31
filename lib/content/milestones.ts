@@ -7,6 +7,11 @@ export type Achievement = {
 /** Real ships, dated from the public repos. Not awards. */
 export const achievements: Achievement[] = [
   {
+    title: "Shipped Aayam",
+    date: "Oct 2026",
+    description: "A live college timetable platform synced with official spreadsheets and calendar export.",
+  },
+  {
     title: "Shipped Syntrix",
     date: "Jun 2026",
     description: "A modular synthesizer that runs entirely in the browser.",
