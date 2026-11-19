@@ -1,110 +1,75 @@
 import { ArrowUpRight } from "lucide-react"
 
-import { PageHeader } from "@/components/layout/page-header"
-import { SectionHeading } from "@/components/layout/section-heading"
 import { ContactForm } from "@/components/contact/contact-form"
-import { GitHubIcon, XIcon } from "@/components/icons/brand"
-import { profile } from "@/lib/content/profile"
-import { cn } from "@/lib/utils"
+import { PageHeader } from "@/components/layout/page-header"
+import { Reveal, Stagger, StaggerItem } from "@/components/motion"
+import { profile, socialLinks } from "@/lib/content/profile"
 
-const directRoutes = [
-  {
-    name: "GitHub",
-    detail: profile.handle,
-    href: profile.github,
-    icon: GitHubIcon,
-    primary: true,
-  },
-  {
-    name: "DM me on X",
-    detail: profile.xHandle,
-    href: profile.x,
-    icon: XIcon,
-    primary: false,
-  },
+const elsewhere = socialLinks.filter((link) => link.isExternal)
+
+const facts = [
+  { term: "Replies", detail: "Usually within two days." },
+  { term: "Based in", detail: `${profile.location} · IST, UTC+5:30` },
+  { term: "Open to", detail: "Internships, collaborations, good questions." },
 ]
 
-/**
- * The routes were flat list rows with a faint hover tint: nothing read
- * as pressable, and the call - the thing actually worth booking - was
- * weighted the same as a DM.
- *
- * They are now full-width bars in the site's two existing treatments.
- * The solid one is the only filled surface on the page, so it takes the
- * eye without any new visual language being invented for it, and the
- * bordered one reads as the alternative rather than the equal.
- */
+/** Header, then a quiet info column beside a form with room to breathe. */
 export function ContactPage() {
   return (
-    <main>
+    <main className="pb-24 sm:pb-32">
       <PageHeader
         eyebrow="Contact"
-        title="Send a note"
-        action={
-          <span className="border-border bg-muted/30 text-muted-foreground rounded-full border px-3 py-1 text-xs font-medium sm:text-sm">
-            {profile.availability}
-          </span>
-        }
+        title="Say hello."
+        lede="Write about something I built, something you want built, or a role you think fits. Every note is read by me, not a filter."
       />
 
-      <SectionHeading as="h2">Fastest routes</SectionHeading>
+      <div className="grid grid-cols-1 gap-12 border-t pt-10 sm:pt-12 lg:grid-cols-12 lg:gap-10">
+        <aside className="lg:col-span-4" aria-label="Contact details">
+          <Stagger>
+            <dl className="divide-y">
+              {facts.map((fact) => (
+                <StaggerItem key={fact.term} className="py-4 first:pt-0">
+                  <dt className="text-subtle-foreground font-mono text-[11px] tracking-[0.18em] uppercase">
+                    {fact.term}
+                  </dt>
+                  <dd className="mt-1.5 text-[15px] leading-snug">{fact.detail}</dd>
+                </StaggerItem>
+              ))}
+            </dl>
+          </Stagger>
 
-      {/* Side by side from sm; stacked below it, where half a phone
-          width cannot hold the label without truncating it away. */}
-      <div className="mb-16 grid max-w-xl grid-cols-1 gap-3 sm:grid-cols-2">
-        {directRoutes.map((route) => (
-          <a
-            key={route.name}
-            href={route.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={cn(
-              "group focus-visible:ring-ring/50 flex w-full items-center gap-3 rounded-md px-3 py-2.5 text-left outline-none transition-all focus-visible:ring-[3px]",
-              route.primary
-                ? "bg-foreground text-background hover:opacity-90"
-                : "border-border bg-background border hover:border-neutral-400 dark:hover:border-neutral-600"
-            )}
-          >
-            <span
-              className={cn(
-                "flex size-8 shrink-0 items-center justify-center rounded-md",
-                route.primary
-                  ? "bg-background/15"
-                  : "bg-muted text-muted-foreground"
-              )}
-            >
-              <route.icon className="size-4" aria-hidden />
-            </span>
+          <Reveal delay={0.2} className="mt-10">
+            <p className="text-subtle-foreground font-mono text-[11px] tracking-[0.18em] uppercase">
+              Elsewhere
+            </p>
+            <ul className="mt-4 divide-y border-y">
+              {elsewhere.map((link) => (
+                <li key={link.name}>
+                  <a
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group focus-visible:ring-ring/50 flex items-center justify-between gap-4 rounded-sm py-3 text-[15px] outline-none focus-visible:ring-[3px]"
+                  >
+                    <span>{link.name}</span>
+                    <span className="text-muted-foreground group-hover:text-foreground flex items-center gap-2 text-sm transition-colors">
+                      <span className="hidden sm:inline">{link.icon === "x" ? profile.xHandle : null}</span>
+                      <ArrowUpRight
+                        aria-hidden
+                        className="size-4 transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      />
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </aside>
 
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-semibold">
-                {route.name}
-              </span>
-              <span
-                className={cn(
-                  "block truncate text-xs",
-                  route.primary ? "text-background/70" : "text-muted-foreground"
-                )}
-              >
-                {route.detail}
-              </span>
-            </span>
-
-            <ArrowUpRight
-              className="size-4 shrink-0 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-              aria-hidden
-            />
-          </a>
-        ))}
-      </div>
-
-      <SectionHeading as="h2">Send a message</SectionHeading>
-      <div className="max-w-xl">
-        <p className="text-muted-foreground mb-5 max-w-prose text-sm leading-relaxed">
-          Leave a note about something I built, or about something you want
-          built. I reply to the address you put in the form.
-        </p>
-        <ContactForm />
+        <Reveal delay={0.1} className="lg:col-span-7 lg:col-start-6">
+          <h2 className="sr-only">Send a message</h2>
+          <ContactForm />
+        </Reveal>
       </div>
     </main>
   )

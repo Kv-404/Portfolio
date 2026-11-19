@@ -92,7 +92,7 @@ export function CommandMenu({
       description="Jump to a page, open a link, or change a setting."
       // The panel needs its own elevation: at these token values a plain
       // border disappears against the dimmed page in dark mode.
-      className="bg-popover border-border/80 gap-0 p-0 shadow-2xl ring-1 ring-black/5 sm:max-w-lg dark:ring-white/10"
+      className="bg-popover gap-0 p-0 shadow-soft sm:max-w-lg"
     >
       <CommandInput placeholder="Jump to a page or link…" />
       <CommandList className="max-h-[min(65vh,26rem)]">
@@ -118,12 +118,7 @@ export function CommandMenu({
             <CommandItem
               key={project.slug}
               value={`project ${project.title} ${project.technologies.join(" ")}`}
-              onSelect={() =>
-                run(() => {
-                  const href = project.links.website ?? project.links.github
-                  if (href) window.open(href, "_blank", "noopener,noreferrer")
-                })
-              }
+              onSelect={() => run(() => router.push(`/projects/${project.slug}`))}
             >
               <ArrowUpRight className="text-muted-foreground" />
               {project.title}
@@ -210,7 +205,7 @@ export function CommandTrigger({
     >
       <Search className="size-3.5" aria-hidden />
       <span>Search</span>
-      <kbd className="bg-muted text-muted-foreground rounded px-1 py-px font-mono text-[10px] leading-4">
+      <kbd className="bg-muted text-muted-foreground rounded-full px-1.5 py-px font-mono text-[10px] leading-4">
         ⌘K
       </kbd>
     </button>

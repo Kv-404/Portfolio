@@ -9,7 +9,7 @@ import {
 } from "@/lib/content/site"
 
 const description =
-  "Projects and systems built by Kv, including Aayam and Clock-It."
+  "Projects built by Kv, with a full write-up of each: Aayam, a live college timetable, and Image to Poem, an offline photo-to-poem ML pipeline."
 
 export const metadata: Metadata = {
   title: "Projects",

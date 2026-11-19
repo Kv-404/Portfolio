@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next"
+import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
-import { Pixelify_Sans } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 
@@ -10,7 +10,6 @@ import { UiFeedbackProvider } from "@/hooks/use-ui-feedback"
 import { MotionProvider } from "@/components/common/motion-provider"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { LenisSmoothScroll } from "@/components/lenis-smooth-scroll"
-import { UserCursor } from "@/components/common/user-cursor"
 import { SiteShell } from "@/components/layout/site-shell"
 import StructuredData from "@/components/structured-data"
 import { profile } from "@/lib/content/profile"
@@ -20,12 +19,6 @@ import {
   socialPreviewImage,
   socialPreviewTitle,
 } from "@/lib/content/site"
-
-const pixelifySans = Pixelify_Sans({
-  subsets: ["latin"],
-  display: "swap",
-  variable: "--font-pixelify",
-})
 
 const description = socialPreviewDescription
 
@@ -113,8 +106,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+    { media: "(prefers-color-scheme: light)", color: "#fbfbfd" },
+    { media: "(prefers-color-scheme: dark)", color: "#000000" },
   ],
 }
 
@@ -125,21 +118,9 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${GeistMono.variable} ${pixelifySans.variable}`}
+      className={`${GeistSans.variable} ${GeistMono.variable}`}
     >
       <head>
-        {/* Satoshi lives on Fontshare, not Google Fonts, so next/font
-            cannot self-host it. */}
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link
-          rel="preconnect"
-          href="https://cdn.fontshare.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="stylesheet"
-          href="https://api.fontshare.com/v2/css?f%5B%5D=satoshi@variable&display=swap"
-        />
         <StructuredData />
       </head>
       <body className="min-h-dvh font-sans antialiased">
@@ -153,7 +134,6 @@ export default function RootLayout({
             <MotionProvider>
               <UiFeedbackProvider>
                 <LenisSmoothScroll />
-                <UserCursor name="Sup" />
                 <SiteShell>{children}</SiteShell>
               </UiFeedbackProvider>
             </MotionProvider>
