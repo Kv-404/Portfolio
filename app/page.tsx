@@ -1,23 +1,18 @@
 import { Hero } from "@/components/home/hero"
-import { About } from "@/components/home/about"
-import { ExperienceSection } from "@/components/home/experience"
 import { ProjectsSection } from "@/components/home/projects-section"
-import { Stack } from "@/components/home/stack"
+import { Record } from "@/components/home/record"
 import { GitHubActivity } from "@/components/home/github-activity"
-import { Achievements } from "@/components/home/milestones"
 import { CTA } from "@/components/home/cta"
 
+/** Hero, then four numbered sections. */
 export default function HomePage() {
   return (
-    <main className="flex flex-col gap-20">
+    <main className="flex flex-col gap-24 sm:gap-32">
       <Hero />
-      <About />
-      <ExperienceSection />
-      <GitHubActivity />
-      <ProjectsSection />
-      <Stack />
-      <Achievements />
-      <CTA />
+      <ProjectsSection index="01" />
+      <Record index="02" />
+      <GitHubActivity index="03" />
+      <CTA index="04" />
     </main>
   )
 }

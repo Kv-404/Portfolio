@@ -1,23 +1,34 @@
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 
 import { SectionHeading } from "@/components/layout/section-heading"
 import { ProjectGrid } from "@/components/projects/project-grid"
 import { projects } from "@/lib/content/projects"
 import { sectionIds } from "@/lib/content/site"
 
-export function ProjectsSection() {
+export function ProjectsSection({ index = "01" }: { index?: string }) {
   return (
     <section aria-labelledby={sectionIds.projects}>
-      <SectionHeading id={sectionIds.projects}>Projects</SectionHeading>
+      <SectionHeading
+        id={sectionIds.projects}
+        index={index}
+        label="Work"
+        title="Selected work."
+        lede="Two things I built end to end. Open one for the full story."
+        action={
+          <Link
+            href="/projects"
+            className="hover:text-foreground focus-visible:ring-ring/50 group inline-flex items-center gap-1.5 rounded-sm font-mono text-[11px] tracking-[0.18em] uppercase outline-none transition-colors focus-visible:ring-[3px]"
+          >
+            All projects
+            <ArrowRight
+              aria-hidden
+              className="size-3.5 transition-transform duration-500 ease-[var(--ease-out)] group-hover:translate-x-0.5"
+            />
+          </Link>
+        }
+      />
       <ProjectGrid projects={projects.slice(0, 2)} />
-      <Link
-        href="/projects"
-        className="text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 mt-6 inline-flex min-h-11 items-center gap-1 text-sm underline-offset-4 outline-none hover:underline focus-visible:ring-[3px]"
-      >
-        All projects
-        <ArrowUpRight className="size-4" aria-hidden />
-      </Link>
     </section>
   )
 }

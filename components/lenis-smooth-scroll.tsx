@@ -58,16 +58,10 @@ export function LenisSmoothScroll() {
       const lenis = new Lenis({
         anchors: true,
         autoRaf: false,
-        // `lerp` is the whole feel. It is the fraction of the remaining
-        // distance covered each frame, so higher is faster: 0.1 needed
-        // ~22 frames (~370ms) to arrive, which reads as lag. 0.18 gets
-        // there in ~12 (~200ms) - still eased, but it keeps up with the
-        // wheel instead of gliding on after it.
-        //
-        // No `duration` or `easing` here on purpose: Lenis ignores both
-        // whenever `lerp` is set, so passing them only looks like they
-        // are doing something.
-        lerp: 0.18,
+        // Low lerp = long, soft glide (Apple-like). ~0.09 settles in ~600ms.
+        lerp: 0.09,
+        wheelMultiplier: 1,
+        smoothWheel: true,
       })
       lenisRef.current = lenis
 

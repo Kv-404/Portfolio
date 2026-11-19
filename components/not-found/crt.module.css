@@ -1,0 +1,121 @@
+/* CRT texture + idle motion for the 404 frame. Monochrome only. */
+
+.frame {
+  background-color: #0a0a0a;
+  color: #f5f5f7;
+}
+
+/* Fine horizontal scanlines over the whole frame. */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(255 255 255 / 0.035) 0px,
+    rgb(255 255 255 / 0.035) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  animation: flicker 6s steps(1, end) infinite;
+}
+
+/* Edge falloff, like the glass of a tube. */
+.vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.65) 100%);
+}
+
+/* Scanlines on the monitor glass itself, a little heavier. */
+.screenLines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgb(0 0 0 / 0.35) 0px,
+    rgb(0 0 0 / 0.35) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+/* A soft bright band that rolls down the glass every few seconds. */
+.rollBar {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgb(255 255 255 / 0.06) 50%,
+    transparent
+  );
+  height: 30%;
+  animation: roll 7s linear infinite;
+}
+
+.screenGlow {
+  animation: screenFlicker 4.5s ease-in-out infinite;
+}
+
+.cursor {
+  animation: blink 1.05s steps(1, end) infinite;
+}
+
+.float {
+  animation: float 7s ease-in-out infinite;
+}
+
+.shadow {
+  animation: shadow 7s ease-in-out infinite;
+}
+
+.led {
+  animation: led 2.8s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  41% { opacity: 0.82; }
+  42% { opacity: 1; }
+  77% { opacity: 0.9; }
+  78% { opacity: 1; }
+}
+
+@keyframes screenFlicker {
+  0%, 100% { opacity: 1; }
+  48% { opacity: 0.94; }
+  50% { opacity: 0.88; }
+  52% { opacity: 0.97; }
+}
+
+@keyframes roll {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(340%); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes shadow {
+  0%, 100% { transform: scaleX(1); opacity: 0.55; }
+  50% { transform: scaleX(0.94); opacity: 0.4; }
+}
+
+@keyframes led {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanlines,
+  .rollBar,
+  .screenGlow,
+  .cursor,
+  .float,
+  .shadow,
+  .led {
+    animation: none !important;
+  }
+  .rollBar {
+    display: none;
+  }
+}

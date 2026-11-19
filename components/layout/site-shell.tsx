@@ -1,27 +1,26 @@
 import { Navbar } from "@/components/layout/navbar"
 import { Footer } from "@/components/layout/footer"
+import { ScrollProgress } from "@/components/motion"
 
 /**
- * Two columns. The left one stays put and carries who this is.
- * The right one is the work. Nothing about this frame is a ruled sheet.
+ * One centred column, wide like an Apple product page. The nav floats
+ * above everything as a glass pill; sections own their own spacing.
  */
 export function SiteShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="mx-auto min-h-dvh w-full max-w-6xl overflow-x-clip px-5 sm:px-8">
+    <div className="relative min-h-dvh w-full overflow-x-clip">
       <a
         href="#main"
-        className="focus:bg-background focus:ring-ring/50 sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-sm focus:border focus:px-3 focus:py-2 focus:text-sm focus:ring-[3px]"
+        className="focus:bg-background focus:ring-ring/50 sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[80] focus:rounded-full focus:border focus:px-4 focus:py-2 focus:text-sm focus:ring-[3px]"
       >
         Skip to content
       </a>
-
-      <div className="md:grid md:grid-cols-[220px_minmax(0,1fr)] md:gap-16 lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-24">
-        <Navbar />
-        <div id="main" className="w-full min-w-0 max-w-full pt-2 pb-16 md:py-14">
-          {children}
-          <Footer />
-        </div>
+      <ScrollProgress />
+      <Navbar />
+      <div id="main" className="mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-10">
+        {children}
       </div>
+      <Footer />
     </div>
   )
 }

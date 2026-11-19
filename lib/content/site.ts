@@ -17,6 +17,14 @@ export const navLinks = [
   { name: "Contact", href: "/contact" },
 ]
 
+/** Numbered in-page index shown in the sidebar on the home page. */
+export const homeIndex = [
+  { index: "01", name: "Work", id: "projects" },
+  { index: "02", name: "Record", id: "experience" },
+  { index: "03", name: "Signal", id: "activity" },
+  { index: "04", name: "Contact", id: "contact" },
+] as const
+
 /** In-page anchors, kept in one place so the nav and the sections agree. */
 export const sectionIds = {
   about: "about",

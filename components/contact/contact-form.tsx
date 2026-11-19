@@ -1,13 +1,14 @@
 "use client"
 
 import { useMemo, useState } from "react"
-import { Loader2, Send } from "lucide-react"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
+import { ArrowRight, Check, Loader2 } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+import { EASE } from "@/components/motion"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { useUiFeedback } from "@/hooks/use-ui-feedback"
+import { cn } from "@/lib/utils"
 
 type FormState = "idle" | "loading" | "success" | "error"
 
@@ -20,15 +21,27 @@ export function ContactForm() {
   const [feedback, setFeedback] = useState<string | null>(null)
   const [email, setEmail] = useState("")
   const [body, setBody] = useState("")
-  const { tap } = useUiFeedback()
+  const [touched, setTouched] = useState({ email: false, body: false })
+  const reduce = useReducedMotion()
 
-  const canSubmit = useMemo(
-    () => EMAIL_RE.test(email.trim()) && body.trim().length >= MIN_MESSAGE,
-    [email, body]
-  )
+  const emailValid = EMAIL_RE.test(email.trim())
+  const bodyLength = body.trim().length
+  const bodyValid = bodyLength >= MIN_MESSAGE
+
+  const canSubmit = useMemo(() => emailValid && bodyValid, [emailValid, bodyValid])
+
+  // Any edit after a result clears it, so the button reads "Send" again.
+  const settle = () => {
+    if (state === "success" || state === "error") {
+      setState("idle")
+      setFeedback(null)
+    }
+  }
 
   const onSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
+    if (state === "success") return
+    setTouched({ email: true, body: true })
     if (state === "loading" || !canSubmit) return
 
     setState("loading")
@@ -52,90 +65,133 @@ export function ContactForm() {
       setFeedback("Message sent. I'll get back to you soon.")
       setEmail("")
       setBody("")
+      setTouched({ email: false, body: false })
     } catch {
       setState("error")
       setFeedback("No connection. Check your network and try again.")
     }
   }
 
+  const showEmailError = touched.email && !emailValid
+  const showBodyError = touched.body && !bodyValid
+
+  const label = {
+    idle: { text: "Send message", icon: <ArrowRight aria-hidden className="size-4" /> },
+    error: { text: "Try again", icon: <ArrowRight aria-hidden className="size-4" /> },
+    loading: { text: "Sending", icon: <Loader2 aria-hidden className="size-4 animate-spin" /> },
+    success: { text: "Sent", icon: <Check aria-hidden className="size-4" /> },
+  }[state]
+
   return (
-    <form onSubmit={onSubmit} className="space-y-5" noValidate>
-      <div className="space-y-2">
+    <form onSubmit={onSubmit} className="space-y-6" noValidate aria-busy={state === "loading"}>
+      <div className="space-y-2.5">
         <Label htmlFor="contact-email">Your email</Label>
         <Input
           id="contact-email"
           type="email"
           name="email"
           autoComplete="email"
+          inputMode="email"
           placeholder="you@example.com"
           value={email}
-          onChange={(event) => setEmail(event.target.value)}
+          onChange={(event) => {
+            setEmail(event.target.value)
+            settle()
+          }}
+          onBlur={() => setTouched((t) => ({ ...t, email: true }))}
+          aria-invalid={showEmailError || undefined}
+          aria-describedby="contact-email-hint"
           required
         />
+        <p id="contact-email-hint" className="text-muted-foreground text-[13px]">
+          {showEmailError ? "That address doesn't look complete." : "Replies go to this address."}
+        </p>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <Label htmlFor="contact-message">Your message</Label>
         <Textarea
           id="contact-message"
           name="message"
           rows={6}
-          placeholder="What are you building, and where do you want help?"
-          className="min-h-32 resize-none"
+          placeholder="What are you building, and where could I help?"
+          className="min-h-36 resize-none"
           value={body}
-          onChange={(event) => setBody(event.target.value)}
+          onChange={(event) => {
+            setBody(event.target.value)
+            settle()
+          }}
+          onBlur={() => setTouched((t) => ({ ...t, body: true }))}
+          aria-invalid={showBodyError || undefined}
+          aria-describedby="contact-message-hint"
           required
         />
-        <p className="text-muted-foreground text-xs">
-          At least {MIN_MESSAGE} characters so I know what you need.
+        <p
+          id="contact-message-hint"
+          className="text-muted-foreground flex justify-between gap-4 text-[13px]"
+        >
+          <span>
+            {showBodyError
+              ? `A little more, please — at least ${MIN_MESSAGE} characters.`
+              : `At least ${MIN_MESSAGE} characters so I know what you need.`}
+          </span>
+          <span aria-hidden className="tabular-nums">
+            {bodyLength}
+          </span>
         </p>
       </div>
 
-      {/* Full width and on its own line. Sharing a row with the "goes
-          straight to" note made the two compete, and a half-width button
-          under a full-width textarea reads as an afterthought. The note
-          sits under it as a caption instead. */}
-      <div className="space-y-2 pt-1">
-        <Button
+      <div className="flex flex-col items-start gap-4 pt-1 sm:flex-row sm:items-center">
+        <motion.button
           type="submit"
-          disabled={state === "loading" || !canSubmit}
-          className="bg-foreground text-background h-11 w-full rounded-md text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-45"
-        >
-          {state === "loading" ? (
-            <>
-              <Loader2 className="animate-spin" aria-hidden />
-              Sending
-            </>
-          ) : (
-            <>
-              <Send aria-hidden />
-              Send message
-            </>
+          layout={!reduce}
+          transition={{ layout: { duration: 0.6, ease: EASE } }}
+          disabled={state === "loading" || (state !== "success" && !canSubmit)}
+          data-ui-feedback="tap"
+          className={cn(
+            "bg-foreground text-background focus-visible:ring-ring/50 inline-flex h-12 items-center gap-2.5 overflow-hidden rounded-full pr-1.5 pl-6 text-[15px] font-medium outline-none focus-visible:ring-[3px]",
+            "transition-opacity duration-300 disabled:cursor-not-allowed disabled:opacity-40",
+            state === "loading" && "disabled:opacity-100"
           )}
-        </Button>
-        {/* One row under the button: the result on the left where
-            reading starts, the address held to the right. `ml-auto`
-            rather than justify-between, so the address stays put whether
-            or not there is a message beside it. */}
-        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 text-xs">
+        >
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={state}
+              initial={reduce ? false : { y: 18, opacity: 0, filter: "blur(4px)" }}
+              animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+              exit={reduce ? undefined : { y: -18, opacity: 0, filter: "blur(4px)" }}
+              transition={{ duration: 0.5, ease: EASE }}
+              className="inline-flex items-center gap-2.5 whitespace-nowrap"
+            >
+              {label.text}
+              <span className="bg-background text-foreground inline-flex size-9 items-center justify-center rounded-full">
+                {label.icon}
+              </span>
+            </motion.span>
+          </AnimatePresence>
+        </motion.button>
+
+        <AnimatePresence>
           {feedback ? (
-            <p
-              role="status"
-              aria-live="polite"
-              className={
-                state === "success"
-                  ? "text-emerald-600 dark:text-emerald-400"
-                  : "text-destructive"
-              }
+            <motion.p
+              key={feedback}
+              initial={reduce ? false : { opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: EASE }}
+              className={cn(
+                "text-[15px]",
+                state === "success" ? "text-foreground" : "text-muted-foreground"
+              )}
             >
               {feedback}
-            </p>
+            </motion.p>
           ) : null}
-
-          <p className="text-muted-foreground ml-auto">
-            Replies go to the address you leave.
-          </p>
-        </div>
+        </AnimatePresence>
+        {/* Persistent live region so screen readers hear every result. */}
+        <p role="status" aria-live="polite" className="sr-only">
+          {feedback ?? ""}
+        </p>
       </div>
     </form>
   )

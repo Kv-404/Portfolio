@@ -1,142 +1,106 @@
 "use client"
 
-import { useRef } from "react"
 import Image from "next/image"
-import { GitHubIcon } from "@/components/icons/brand"
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 
-import { TechIcon, slugForTech } from "@/components/common/tech-icon"
-import { chipClass } from "@/lib/button-styles"
+import { TiltCard } from "@/components/motion"
 import type { Project } from "@/lib/content/projects"
 import { cn } from "@/lib/utils"
 
-/** The skill badge, trimmed a little to sit on the title's line. */
-const projectButtonClass = cn(chipClass, "gap-1 px-1.5 py-0.5")
-
-/**
- * Projects with a clip show it in place of the still on hover or focus.
- * The still is the poster, so nothing loads until the visitor asks.
- */
-function Preview({ project }: { project: Project }) {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-  // The frame lives on the wrapper, not here, so the border stays put
-  // while the picture inside it drifts in. 3% over half a second is
-  // enough to register as alive without reading as a zoom.
-  const shared =
-    "h-44 w-full object-cover object-top transition-transform duration-500 ease-out group-hover/media:scale-[1.03] motion-reduce:transition-none motion-reduce:group-hover/media:scale-100 sm:h-48"
-
-  if (!project.video) {
-    return (
-      <Image
-        src={project.image}
-        alt=""
-        width={1200}
-        height={630}
-        className={shared}
-      />
-    )
-  }
-
+/** Small mono status pill. Filled dot for live, hollow otherwise. */
+export function StatusPill({ project, className }: { project: Project; className?: string }) {
   return (
-    <video
-      ref={videoRef}
-      src={project.video}
-      poster={project.image}
-      muted
-      loop
-      playsInline
-      preload="none"
-      aria-hidden
-      className={shared}
-      onMouseEnter={() => void videoRef.current?.play().catch(() => {})}
-      onMouseLeave={() => videoRef.current?.pause()}
-    />
+    <span
+      className={cn(
+        "text-muted-foreground inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[10px] leading-none tracking-[0.14em] uppercase",
+        className
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn(
+          "size-1.5 rounded-full",
+          project.status === "live" ? "bg-foreground" : "border-muted-foreground border"
+        )}
+      />
+      {project.statusLabel}
+    </span>
   )
 }
 
 /**
- * Deliberately not a card: no border, no shadow, no rounded panel. The
- * rest of the site is flat sections split by hairlines, and a raised box
- * sitting inside that read as a widget bolted on from somewhere else.
- * The only framed thing here is the screenshot.
- *
- * The two links sit on the title's line rather than in a footer strip,
- * which is what the subheading used to occupy. They have to live outside
- * the media anchor - a link inside a link is invalid markup.
+ * Medium card: 16/10 cover (grey until hover/focus), title + status,
+ * one-line subheading and a quiet tech line. The whole card links to
+ * the project's detail page.
  */
-export function ProjectCard({ project }: { project: Project }) {
-  const { website, github } = project.links
-  const primaryHref = website ?? github
+export function ProjectCard({
+  project,
+  index = 0,
+  priority = false,
+}: {
+  project: Project
+  index?: number
+  priority?: boolean
+}) {
+  const number = String(index + 1).padStart(2, "0")
 
   return (
-    <div className="group/card relative flex flex-1 flex-col gap-2">
-      <a
-        href={primaryHref}
-        target="_blank"
-        rel="noopener noreferrer"
-        // `group/media` and not the card's own group: the drift should
-        // answer the pointer being on the picture, not anywhere on the
-        // entry. `overflow-hidden` is what keeps the scale inside the frame.
-        className="group/media border-border focus-visible:ring-ring/50 block overflow-hidden rounded-md border outline-none focus-visible:ring-[3px]"
-      >
-        <Preview project={project} />
-      </a>
+    <div className="h-full [perspective:1600px]">
+      <TiltCard max={2.5} className="group/card relative h-full">
+        <Link
+          href={`/projects/${project.slug}`}
+          className="bg-card focus-visible:ring-ring/50 relative flex h-full flex-col overflow-hidden rounded-[24px] border p-2 shadow-soft outline-none transition-[border-color] duration-500 hover:border-foreground/20 focus-visible:ring-[3px]"
+        >
+          {/* Monochrome spotlight that follows the pointer. */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-700 ease-[var(--ease-out)] group-hover/card:opacity-100 bg-[radial-gradient(520px_circle_at_var(--mx,50%)_var(--my,50%),rgb(255_255_255/0.06),transparent_45%)]"
+          />
 
-      <div className="flex items-center justify-between gap-3">
-        <h3 className="min-w-0 truncate text-[15px] leading-snug font-semibold">
-          <a
-            href={primaryHref}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-primary focus-visible:ring-ring/50 rounded-sm outline-none transition-colors focus-visible:ring-[3px]"
-          >
-            {project.title}
-          </a>
-        </h3>
+          <span className="bg-muted relative block aspect-[16/10] overflow-hidden rounded-[18px] [clip-path:inset(0_round_18px)]">
+            <Image
+              src={project.cover.src}
+              alt={project.cover.alt}
+              fill
+              priority={priority}
+              sizes="(min-width: 1200px) 560px, (min-width: 768px) 46vw, calc(100vw - 2.5rem)"
+              className={cn(
+                "object-cover object-top grayscale transition-[scale,filter] duration-700 ease-[var(--ease-out)]",
+                "group-hover/card:scale-[1.03] group-hover/card:grayscale-0 group-focus-within/card:grayscale-0",
+                "motion-reduce:group-hover/card:scale-100"
+              )}
+            />
+          </span>
 
-        <div className="flex shrink-0 items-center gap-1.5">
-          {website && (
-            <a
-              href={website}
-              data-ui-feedback="tap"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={projectButtonClass}
-            >
-              Live
-            </a>
-          )}
-          {github && (
-            <a
-              href={github}
-              data-ui-feedback="tap"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={projectButtonClass}
-            >
-              <GitHubIcon className="size-3 shrink-0" aria-hidden />
-              Code
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* One line only - the full copy lives on the project page. */}
-      <p className="text-muted-foreground truncate text-[13px] leading-snug">
-        {project.description}
-      </p>
-
-      {/* The skill badge with its brand mark, held at the size these
-          already were - only the styling is borrowed, not the scale. */}
-      <ul className="flex flex-wrap gap-1.5">
-        {project.technologies.slice(0, 4).map((tech) => (
-          <li key={tech} className="flex">
-            <span className={cn(chipClass, "gap-1 px-1.5 py-0.5 text-[11px]")}>
-              <TechIcon slug={slugForTech(tech)} className="size-3 shrink-0" />
-              {tech}
+          <span className="flex flex-1 flex-col gap-2.5 px-3 pt-4 pb-3 sm:px-4">
+            <span className="flex items-center justify-between gap-3">
+              <span className="flex min-w-0 items-baseline gap-3">
+                <span className="text-subtle-foreground font-mono text-[11px] tabular-nums">{number}</span>
+                <span className="truncate text-xl font-semibold tracking-[-0.02em] sm:text-[22px]">
+                  {project.title}
+                </span>
+              </span>
+              <span className="flex items-center gap-2">
+                <StatusPill project={project} />
+                <ArrowUpRight
+                  aria-hidden
+                  className="text-muted-foreground group-hover/card:text-foreground size-4 shrink-0 transition-[translate,color] duration-500 ease-[var(--ease-out)] group-hover/card:translate-x-0.5 group-hover/card:-translate-y-0.5"
+                />
+              </span>
             </span>
-          </li>
-        ))}
-      </ul>
+            {project.subheading ? (
+              <span className="text-muted-foreground line-clamp-1 text-[15px] leading-snug">
+                {project.subheading}
+              </span>
+            ) : null}
+            <span className="text-subtle-foreground mt-auto truncate pt-1 font-mono text-[10.5px] tracking-[0.12em] uppercase">
+              <span className="sr-only">Built with </span>
+              {project.technologies.slice(0, 4).join(" · ")}
+            </span>
+          </span>
+        </Link>
+      </TiltCard>
     </div>
   )
 }
