@@ -7,6 +7,7 @@ import {
   ArrowUpRight,
   Home,
   Laptop,
+  Mail,
   Moon,
   Search,
   Send,
@@ -33,7 +34,7 @@ import {
   XIcon,
 } from "@/components/icons/brand"
 import { useUiFeedback } from "@/hooks/use-ui-feedback"
-import { socialLinks, type SocialLink } from "@/lib/content/profile"
+import { profile, socialLinks, type SocialLink } from "@/lib/content/profile"
 import { projects } from "@/lib/content/projects"
 import { cn } from "@/lib/utils"
 
@@ -132,6 +133,14 @@ export function CommandMenu({
         <CommandSeparator />
 
         <CommandGroup heading="Links">
+          <CommandItem
+            value={`link email mail ${profile.email}`}
+            onSelect={() => run(() => (window.location.href = `mailto:${profile.email}`))}
+          >
+            <Mail className="text-muted-foreground" />
+            Email
+            <span className="text-muted-foreground ml-auto font-mono text-xs">{profile.email}</span>
+          </CommandItem>
           {external.map((link) => (
             <CommandItem
               key={link.name}

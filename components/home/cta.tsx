@@ -116,12 +116,21 @@ export function CTA({ index = "04" }: { index?: string }) {
 
         <Reveal delay={0.35} y={16} blur={false} className="mt-10 flex flex-col items-center gap-4">
           <ConversationSlider />
-          <Link
-            href="/contact"
-            className="link-underline text-muted-foreground hover:text-foreground focus-visible:ring-ring/50 rounded-sm text-sm transition-colors outline-none focus-visible:ring-[3px]"
-          >
-            or write to me <span aria-hidden>→</span>
-          </Link>
+          <p className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-sm">
+            <Link
+              href="/contact"
+              className="link-underline hover:text-foreground focus-visible:ring-ring/50 rounded-sm transition-colors outline-none focus-visible:ring-[3px]"
+            >
+              or write to me <span aria-hidden>→</span>
+            </Link>
+            <span aria-hidden className="text-subtle-foreground">·</span>
+            <a
+              href={`mailto:${profile.email}`}
+              className="link-underline text-foreground focus-visible:ring-ring/50 rounded-sm font-mono text-[13px] outline-none focus-visible:ring-[3px]"
+            >
+              {profile.email}
+            </a>
+          </p>
         </Reveal>
 
         <Reveal delay={0.45} blur={false} y={8} className="mt-12">

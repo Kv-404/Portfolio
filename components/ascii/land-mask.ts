@@ -1,0 +1,57 @@
+/**
+ * World land mask, 360 x 180 equirectangular (1 degree per cell),
+ * row 0 = 90°N, column 0 = 180°W.
+ *
+ * Source: Natural Earth 1:110m "land" polygons (public domain,
+ * naturalearthdata.com, via github.com/nvkelso/natural-earth-vector),
+ * rasterised with 3x3 supersampling (cell = land when >= 2 of 9 samples hit).
+ *
+ * Encoding: run lengths of alternating ocean/land cells (starting with
+ * ocean), each run a little-endian base-128 varint, the bytes base64'd.
+ */
+export const LAND_W = 360
+export const LAND_H = 180
+export const LAND_RLE =
+  "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"
+
+let cache: Uint8Array | null = null
+
+/**
+ * Decoded mask, row-major LAND_W x LAND_H:
+ * 0 = ocean, 1 = land, 2 = coast (land with an ocean neighbour).
+ */
+export function landMask(): Uint8Array {
+  if (cache) return cache
+  const bin = atob(LAND_RLE)
+  const out = new Uint8Array(LAND_W * LAND_H)
+  let i = 0
+  let p = 0
+  let v = 0
+  while (i < bin.length) {
+    let run = 0
+    let shift = 0
+    let b: number
+    do {
+      b = bin.charCodeAt(i++)
+      run |= (b & 127) << shift
+      shift += 7
+    } while (b & 128)
+    if (v) out.fill(1, p, p + run)
+    p += run
+    v ^= 1
+  }
+  // mark coastline cells (longitude wraps, latitude clamps)
+  for (let y = 0; y < LAND_H; y++) {
+    for (let x = 0; x < LAND_W; x++) {
+      const k = y * LAND_W + x
+      if (!out[k]) continue
+      const l = y * LAND_W + ((x + LAND_W - 1) % LAND_W)
+      const r = y * LAND_W + ((x + 1) % LAND_W)
+      const u = Math.max(0, y - 1) * LAND_W + x
+      const d = Math.min(LAND_H - 1, y + 1) * LAND_W + x
+      if (!out[l] || !out[r] || !out[u] || !out[d]) out[k] = 2
+    }
+  }
+  cache = out
+  return out
+}

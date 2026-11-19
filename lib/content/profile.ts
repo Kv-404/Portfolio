@@ -19,6 +19,7 @@ export const profile = {
   bluesky: "https://bsky.app/profile/kv404.dev",
   instagram: "https://www.instagram.com/theycallmekv__/",
   website: "https://kv404.dev",
+  email: "Kv404@protonmail.com",
   availability: "CSE student in Mumbai",
 } as const
 

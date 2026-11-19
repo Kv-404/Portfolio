@@ -11,22 +11,19 @@ import {
   useTransform,
 } from "framer-motion"
 
-import { AsciiHero } from "@/components/ascii/ascii-hero"
+import { AsciiGlobe } from "@/components/ascii/ascii-globe"
 import { EASE, Magnetic, TextReveal } from "@/components/motion"
-import { achievements } from "@/lib/content/milestones"
 import { bio } from "@/lib/content/profile"
+import { achievements } from "@/lib/content/milestones"
+
 
 const pad = (n: number) => String(n).padStart(2, "0")
-
-/** Year of the most recent ship, e.g. "Nov 2026" → "2026". */
-const latestYear =
-  achievements[0]?.date.split(" ").pop() ?? String(new Date().getFullYear())
 
 const facts = [
   { label: "Based", value: "Mumbai" },
   { label: "Projects shipped", value: pad(achievements.length) },
   { label: "Studying", value: "CSE" },
-  { label: "Year", value: latestYear },
+  { label: "Year", value: String(new Date().getFullYear()) },
 ]
 
 const LINE_ONE = "Small systems,"
@@ -34,7 +31,8 @@ const LINE_TWO = "built to be read."
 
 /**
  * Opening screen. A mono dateline, a two-line display headline that rises
- * out of a mask, a short lede, two actions and an editorial row of facts.
+ * out of a mask, a short lede, and two actions; the ASCII network globe
+ * sits beside it (below on phones) and a facts strip closes the screen.
  * As the visitor scrolls away the whole block eases back: it scales down a
  * touch, lags behind the page and fades, like a product page handing off
  * to the next scene.
@@ -54,19 +52,20 @@ export function Hero() {
   const opacity = useTransform(progress, [0, 0.75], [1, 0])
   const scale = useTransform(progress, [0, 1], [1, 0.92])
   const y = useTransform(progress, [0, 1], [0, 140])
+  const artOpacity = useTransform(progress, [0, 0.85], [1, 0])
 
   return (
     <section
       ref={ref}
       aria-label="Introduction"
-      className="relative flex min-h-[80svh] flex-col pt-28 pb-6 sm:pt-32"
+      className="relative isolate flex min-h-[100svh] flex-col pt-24 pb-6 sm:pt-28 lg:pb-8"
     >
       <motion.div
         style={reduce ? undefined : { opacity, scale, y }}
-        className="flex flex-1 origin-top flex-col will-change-transform"
+        className="relative z-10 flex flex-1 origin-top flex-col will-change-transform"
       >
-        <div className="grid items-center gap-8 pb-10 sm:pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,460px)] lg:gap-10">
-          <div className="min-w-0">
+        <div className="relative grid flex-1 content-center items-center gap-6 py-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-0 lg:py-10">
+          <div className="relative z-10 min-w-0 lg:max-w-[540px]">
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -80,7 +79,7 @@ export function Hero() {
               <span>Kv — CSE student, Mumbai</span>
             </motion.p>
 
-            <h1 className="display mt-6 text-[clamp(2.5rem,8vw,3.5rem)] text-balance sm:mt-7 sm:text-[clamp(2.5rem,5.2vw,4.5rem)]">
+            <h1 className="display mt-6 text-[clamp(2.5rem,10vw,3.25rem)] text-balance sm:mt-7 sm:text-[clamp(2.5rem,5.2vw,4.5rem)]">
               <span className="sr-only">
                 {LINE_ONE} {LINE_TWO}
               </span>
@@ -100,7 +99,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 16, filter: "blur(6px)" }}
               animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               transition={{ duration: 1.1, ease: EASE, delay: 0.7 }}
-              className="text-muted-foreground mt-5 max-w-[46ch] text-base leading-relaxed text-pretty sm:mt-6 sm:text-lg"
+              className="text-muted-foreground mt-5 max-w-[44ch] text-base leading-relaxed text-pretty sm:mt-6 sm:text-lg"
             >
               {bio[0]?.text}
             </motion.p>
@@ -126,7 +125,7 @@ export function Hero() {
               <Magnetic strength={0.2}>
                 <Link
                   href="/contact"
-                  className="hover:bg-accent focus-visible:ring-ring/50 inline-flex h-11 items-center rounded-full border px-5 text-sm font-medium outline-none transition-[background-color,transform] duration-500 ease-[var(--ease-out)] focus-visible:ring-[3px] active:scale-[0.97]"
+                  className="bg-background/60 hover:bg-accent focus-visible:ring-ring/50 inline-flex h-11 items-center rounded-full border px-5 text-sm font-medium outline-none backdrop-blur-sm transition-[background-color,transform] duration-500 ease-[var(--ease-out)] focus-visible:ring-[3px] active:scale-[0.97]"
                 >
                   Get in touch
                 </Link>
@@ -134,14 +133,23 @@ export function Hero() {
             </motion.div>
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, filter: "blur(10px)" }}
-            animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-            transition={{ duration: 1.6, ease: EASE, delay: 0.5 }}
-            className="mx-auto w-full max-w-[460px]"
-          >
-            <AsciiHero className="h-[260px] w-full sm:h-[360px] lg:aspect-square lg:h-auto" />
-          </motion.div>
+          {/*
+            Globe. On desktop it is anchored to the right column but sized
+            off the viewport, so it can run past the column and be cropped
+            by the window edge. The square includes headroom for the lifted
+            routes; the sphere itself is ~82% of it.
+          */}
+          <div className="relative h-[min(420px,112vw)] lg:h-full lg:min-h-[480px]">
+            <motion.div
+              style={reduce ? undefined : { opacity: artOpacity }}
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 2, ease: EASE, delay: 0.25 }}
+              className="absolute top-1/2 left-1/2 size-[min(420px,112vw)] -translate-x-1/2 -translate-y-1/2 lg:left-[52%] lg:size-[min(780px,58vw,calc((100svh-280px)*1.15))] lg:-translate-x-[40%]"
+            >
+              <AsciiGlobe className="size-full" />
+            </motion.div>
+          </div>
         </div>
 
         <motion.dl
@@ -151,7 +159,7 @@ export function Hero() {
             hidden: {},
             show: { transition: { staggerChildren: 0.08, delayChildren: 1 } },
           }}
-          className="mt-auto grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:grid-cols-4 sm:pt-6"
+          className="relative z-10 grid grid-cols-2 gap-x-6 gap-y-6 border-t pt-5 sm:grid-cols-4 sm:pt-6"
         >
           {facts.map((fact) => (
             <motion.div
@@ -171,23 +179,6 @@ export function Hero() {
             </motion.div>
           ))}
         </motion.dl>
-      </motion.div>
-
-      <motion.div
-        aria-hidden
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.2, delay: 1.6 }}
-        className="text-subtle-foreground mt-8 flex items-center justify-center gap-3 font-mono text-[10px] tracking-[0.2em] uppercase"
-      >
-        <span>Scroll</span>
-        <span className="bg-border relative h-6 w-px overflow-hidden">
-          <motion.span
-            className="bg-foreground absolute inset-x-0 top-0 h-1/2"
-            animate={{ y: ["-100%", "200%"] }}
-            transition={{ duration: 1.8, ease: EASE, repeat: Infinity, repeatDelay: 0.4 }}
-          />
-        </span>
       </motion.div>
     </section>
   )

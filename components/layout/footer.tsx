@@ -77,6 +77,11 @@ export function Footer() {
           <nav aria-label="Elsewhere" className="md:col-span-2">
             <ColumnTitle>Elsewhere</ColumnTitle>
             <ul className="space-y-3 text-[15px]">
+              <li>
+                <a href={`mailto:${profile.email}`} className={linkClass}>
+                  Email
+                </a>
+              </li>
               {elsewhere.map((link) => (
                 <li key={link.name}>
                   <a href={link.href} target="_blank" rel="noopener noreferrer" className={linkClass}>

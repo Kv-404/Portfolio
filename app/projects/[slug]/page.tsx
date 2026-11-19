@@ -15,8 +15,9 @@ import { cn } from "@/lib/utils"
 
 type Params = { params: Promise<{ slug: string }> }
 
-export const dynamicParams = false
-
+// No `dynamicParams = false`: on Cloudflare (OpenNext) prerendered pages
+// aren't in a cache, so that setting turned every project page into a
+// 404. Unknown slugs still 404 through notFound() below.
 export function generateStaticParams() {
   return projects.map((project) => ({ slug: project.slug }))
 }
