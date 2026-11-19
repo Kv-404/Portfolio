@@ -85,9 +85,9 @@ export const metadata: Metadata = {
     images: [socialPreviewImage],
   },
   icons: {
-    icon: "/favicon?v=3",
-    shortcut: "/favicon?v=3",
-    apple: "/favicon?v=3",
+    icon: [{ url: "/favicon.svg?v=4", type: "image/svg+xml" }],
+    shortcut: "/favicon.svg?v=4",
+    apple: "/favicon.svg?v=4",
   },
   category: "technology",
   classification: "Portfolio Website",
