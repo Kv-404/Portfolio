@@ -256,7 +256,7 @@ export const projects: Project[] = [
     role: "ML & engineering · college mini-project",
     cover: {
       src: "/projects/image-to-poem/01-studio.jpg",
-      alt: "The Studio: a lake photo is dropped in, the app reads it as calm with full confidence, captions it and writes an eight-line poem",
+      alt: "The Studio: a portrait of a smiling man is dropped in, the app reads it as happy with full confidence, captions it and writes an eight-line poem in about 6.6 seconds",
       width: 1600,
       height: 1000,
     },
@@ -388,7 +388,7 @@ export const projects: Project[] = [
     gallery: [
       {
         src: "/projects/image-to-poem/01-studio.jpg",
-        alt: "The Studio with a lake photo, its caption, the calm mood and an eight-line poem",
+        alt: "The Studio with a portrait photo, its caption, the happy mood and an eight-line poem",
         caption: "The Studio: drop a photo, get a caption, a mood and a poem.",
         width: 1600,
         height: 1000,
@@ -412,7 +412,7 @@ export const projects: Project[] = [
         alt: "Five training steps, the poem score distribution and train versus validation loss",
         caption: "How the poem data was built and how training went.",
         width: 1600,
-        height: 1317,
+        height: 1444,
       },
       {
         src: "/projects/image-to-poem/06-poem-eval.jpg",
@@ -426,7 +426,7 @@ export const projects: Project[] = [
         alt: "Four sample photos, one per mood, each with its caption and poem",
         caption: "One sample per mood.",
         width: 1600,
-        height: 1167,
+        height: 1222,
       },
       {
         src: "/projects/image-to-poem/04-clustering.jpg",
@@ -440,7 +440,7 @@ export const projects: Project[] = [
         alt: "Dataset section with counts per mood and a grid of photos",
         caption: "251 Creative Commons photos from Openverse.",
         width: 1600,
-        height: 1227,
+        height: 1327,
       },
       {
         src: "/projects/image-to-poem/10-phone.jpg",
